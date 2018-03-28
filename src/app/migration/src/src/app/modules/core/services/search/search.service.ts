@@ -5,33 +5,7 @@ import { ConfigService, ServerResponse } from '@sunbird/shared';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
-
-/**
- * Interface
- */
-interface SearchParam {
-
-  /**
-   * Content status
-   */
-  status?: string[];
-
-  /**
-   * Content type - course,textbook,content
-   */
-  contentType?: string[];
-
-  /**
-   * Additional params - userId, lastUpdatedOn, sort etc
-   */
-  params?: any;
-
-  /**
-   * Organization ids
-   */
-  orgid?: string[];
-}
-
+import {SearchParam, Params} from '@sunbird/core';
 /**
  * Service to search content
  */
@@ -91,9 +65,16 @@ export class SearchService {
         request: {
           filters: {
             status: requestParam.status || ['Live'],
-            createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
-            contentType: requestParam.contentType || ['Course']
+           // createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
+            contentType: requestParam.contentType || ['Course'],
+            concept: requestParam.concept,
+            board: requestParam.board,
+            language: requestParam.language,
+            subject: requestParam.subject,
           },
+          limit: requestParam.limit,
+          offset: (requestParam.pageNumber - 1) * requestParam.limit,
+          query: requestParam.query,
           sort_by: {
             lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
           }
@@ -138,11 +119,87 @@ export class SearchService {
       return data;
     });
   }
-
   /**
    * Get searched organization list
    */
   get searchedOrganisationList(): { content: Array<any>, count: number } {
     return this._searchedOrganisationList;
   }
+
+  searchContent(requestParam: SearchParam): Observable<ServerResponse> {
+    const option = {
+      url: this.config.urlConFig.URLS.CONTENT.SEARCH,
+      data: {
+        request: {
+          filters: {
+            concept: requestParam.concept,
+            contentType: requestParam.contentType || ['Course'],
+            objectType: requestParam.objectType,
+            board: requestParam.channel,
+            language: requestParam.language,
+            subject: requestParam.subject,
+            gradeLevel: requestParam.gradeLevel
+          },
+          sort_by: {
+            lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
+          },
+          limit: requestParam.limit,
+          offset: requestParam.offset,
+          query: requestParam.query
+        }
+      }
+    };
+
+    return this.content.post(option)
+    .map((data: ServerResponse) => {
+      this._searchedContentList = data.result;
+      return data;
+    });
+  }
+
+  searchCourse(requestParam: SearchParam): Observable<ServerResponse> {
+    const option = {
+      url: this.config.urlConFig.URLS.COURSE.SEARCH,
+      data: {
+        request: {
+          filters: {
+            concept: requestParam.concept,
+            contentType: requestParam.contentType || ['Course'],
+            objectType: requestParam.objectType,
+            board: requestParam.channel,
+            language: requestParam.language,
+            subject: requestParam.subject,
+          },
+          sort_by: {
+            lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
+          },
+          limit: requestParam.limit,
+          offset: requestParam.offset,
+          query: requestParam.query
+        }
+      }
+    };
+
+    return this.content.post(option)
+    .map((data: ServerResponse) => {
+      this._searchedContentList = data.result;
+      return data;
+    });
+  }
+
+  // getChannel(requestParam: SearchParam) {
+  //  const  channel = requestParam.channel;
+  //  const option = {
+  //   url: this.config.urlConFig.URLS.CHANNEL.READ + channel,
+  //  };
+  //  return this.content.get(option)
+  //  .map((data: ServerResponse) => {
+  //   this._searchedContentList = data.result;
+  //   return data;
+  // });
+  // }
+
+  // getFramework() {
+
+  // }
 }

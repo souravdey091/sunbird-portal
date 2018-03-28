@@ -21,6 +21,9 @@
       ],
       "@sunbird/announcement": [
         "app/modules/announcement"
+      ],
+      "@sunbird/search": [
+        "app/modules/search"
       ]
     },
     "module": "commonjs",

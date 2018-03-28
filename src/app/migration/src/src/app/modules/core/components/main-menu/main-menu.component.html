@@ -1,5 +1,5 @@
 <div class="ui secondary pointing menu">
-	<a class="item"  routerLinkActive="active" routerLink="/home" >
+	<a class="item"  [class.active]="router.isActive('/search/All') || router.isActive('/home')" routerLink="/home"  >
 		{{resourceService?.frmelmnts?.tab?.home}}
 	    </a>
 	<a class="item"  href="/private/index#!/learn" >

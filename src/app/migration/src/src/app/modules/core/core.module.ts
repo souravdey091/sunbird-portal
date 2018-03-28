@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SuiModule } from 'ng2-semantic-ui';
 import { SharedModule } from '@sunbird/shared';
+import { FormsModule } from '@angular/forms';
 import {
   UserService, LearnerService, PermissionService, AnnouncementService,
   BadgesService, ContentService, CoursesService
@@ -18,7 +19,8 @@ import {
     CommonModule,
     SuiModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ],
   declarations: [ MainHeaderComponent, MainMenuComponent , SearchComponent , PermissionDirective],
   exports: [MainHeaderComponent],
