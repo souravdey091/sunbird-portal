@@ -66,7 +66,7 @@ export class SearchService {
            createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
             contentType: requestParam.contentType || ['Course'],
             mimeType: requestParam.mimeType,
-            objectType: requestParam.objectType
+            objectType: requestParam.objectType,
             concept: requestParam.concept,
             board: requestParam.board,
             language: requestParam.language,
