@@ -5,15 +5,11 @@ import { ConfigService, ServerResponse } from '@sunbird/shared';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
-import {SearchParam, Params} from '@sunbird/core';
+import {SearchParam} from '@sunbird/core';
 /**
  * Service to search content
  */
 @Injectable()
-
-/**
- * @class SearchService
- */
 export class SearchService {
   /**
    * Contains searched content list
@@ -65,8 +61,12 @@ export class SearchService {
         request: {
           filters: {
             status: requestParam.status || ['Live'],
+
            // createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
+           createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
             contentType: requestParam.contentType || ['Course'],
+            mimeType: requestParam.mimeType,
+            objectType: requestParam.objectType
             concept: requestParam.concept,
             board: requestParam.board,
             language: requestParam.language,

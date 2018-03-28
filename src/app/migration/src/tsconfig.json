@@ -24,6 +24,15 @@
       ],
       "@sunbird/search": [
         "app/modules/search"
+      ],
+      "@sunbird/resource": [
+        "app/modules/resource"
+      ],
+      "@sunbird/learn": [
+        "app/modules/learn"
+      ],
+      "@sunbird/org-management": [
+        "app/modules/org-management"
       ]
     },
     "sourceMap": true,

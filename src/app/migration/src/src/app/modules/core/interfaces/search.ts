@@ -11,10 +11,14 @@ export interface SearchParam {
      * Content type - course,textbook,content
      */
     contentType?: string[];
+<<<<<<< HEAD
     /**
      * Content concept
      */
     concept?: Array<object>;
+=======
+
+>>>>>>> upstream/angular-migration
     /**
      * Additional params - userId, lastUpdatedOn, sort etc
      */
@@ -60,4 +64,5 @@ export interface SearchParam {
    language?: string[];
    subject?: string[];
    gradeLevel?: string[];
+
   }

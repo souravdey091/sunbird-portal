@@ -7,12 +7,12 @@ import { SharedModule } from '@sunbird/shared';
 import { FormsModule } from '@angular/forms';
 import {
   UserService, LearnerService, PermissionService, AnnouncementService,
-  BadgesService, ContentService, CoursesService
+  BadgesService, ContentService, CoursesService, PageApiService
 } from './services';
 import {
   MainHeaderComponent, MainMenuComponent , SearchComponent
 } from './components';
-
+import { AuthGuard } from './guard/auth-gard.service';
 
 @NgModule({
   imports: [
@@ -26,7 +26,7 @@ import {
   exports: [MainHeaderComponent],
   providers: [
     LearnerService, UserService,
-    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService ]
+    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard ]
 })
 export class CoreModule {
 }
