@@ -61,8 +61,6 @@ export class SearchService {
         request: {
           filters: {
             status: requestParam.status || ['Live'],
-
-           // createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
            createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
             contentType: requestParam.contentType || ['Course'],
             mimeType: requestParam.mimeType,

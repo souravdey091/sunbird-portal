@@ -1,9 +1,8 @@
-// import { setTimeout } from 'timers';
-
 import { SearchService } from './../../services/search/search.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { ServerResponse } from '@sunbird/shared';
+
 
 /**
  * Main menu component
@@ -51,7 +50,6 @@ resources: 'Library',
 profile: 'Users'
 };
   selectedOption: string;
-  // options: Array<string>;
   onChange() {
     console.log(this.search[this.selectedOption]);
      this.router.navigate([this.search[this.selectedOption], 1]);
@@ -61,15 +59,14 @@ profile: 'Users'
     console.log('????', params, this.search[this.selectedOption] );
     this.url = this.search[this.selectedOption];
       this.router.navigate([this.url, 1], {
-        queryParams: {key: params, board: this.queryParam.board, language: this.queryParam.language,
-        subject: this.queryParam.subject }
+        queryParams: {key: params, filter: this.queryParam.filter}
       });
   }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
     this.queryParam = params;
-      console.log('/.....', params.board);
+      console.log('/.....', params);
     });
     this.router.events
     .filter(e => e instanceof NavigationEnd).subscribe((params: any) => {
@@ -83,9 +80,7 @@ profile: 'Users'
       } else {
         this.selectedOption = 'All';
       }
-
     });
-
   }
 
 }

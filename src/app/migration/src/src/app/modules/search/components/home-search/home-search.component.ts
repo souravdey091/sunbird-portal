@@ -1,11 +1,13 @@
 import { Subscription } from 'rxjs/Subscription';
-import { ServerResponse, PaginationService } from '@sunbird/shared';
-import { SearchService } from '@sunbird/core';
+import { ServerResponse, PaginationService , ResourceService} from '@sunbird/shared';
+import { SearchService, CommonService, MyServiceEvent } from '@sunbird/core';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPagination } from '@sunbird/announcement';
 import 'rxjs/add/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
+import { queryDef } from '@angular/core/src/view/query';
+
 
 @Component({
   selector: 'app-home-search',
@@ -14,12 +16,15 @@ import { Observable } from 'rxjs/Observable';
 })
 export class HomeSearchComponent implements OnInit {
   searchService: SearchService;
+  resourceService: ResourceService;
   /**
    * Contains list of published course(s) of logged-in user
    */
   myCoursesList: Array<any> = [];
   key: string;
   board: Array<string>;
+  language: Array<string>;
+  subject: Array<string>;
   /**
    * To navigate to other pages
    */
@@ -39,38 +44,49 @@ export class HomeSearchComponent implements OnInit {
    */
   pageNumber = 1;
   pageLimit = 20;
-  queryParams: any;
-  language: Array<string>;
-  subject: Array<string>;
+  /**
+   * This variable hepls to show and hide page loader.
+   * It is kept true by default as at first when we comes
+   * to a page the loader should be displayed before showing
+   * any data
+   */
+  showLoader = true;
+  loaderMessage: any;
   /**
      * Contains returned object of the pagination service
   * which is needed to show the pagination on inbox view
      */
   pager: IPagination;
-
+content: any;
   constructor(searchService: SearchService, route: Router,
-    activatedRoute: ActivatedRoute, paginationService: PaginationService) {
+    activatedRoute: ActivatedRoute, paginationService: PaginationService,
+    resourceService: ResourceService) {
     this.searchService = searchService;
     this.route = route;
     this.activatedRoute = activatedRoute;
     this.paginationService = paginationService;
+    this.resourceService = resourceService;
   }
 
-  populateCompositeSearch(route) {
+  populateCompositeSearch(bothParams) {
     const searchParams = {
       contentType: ['Collection', 'TextBook', 'LessonPlan', 'Resource', 'Course'],
       limit: this.pageLimit,
       pageNumber: this.pageNumber,
-      query: this.key,
+      query: this.content.key,
       params: {},
-      board: this.board,
-      language: this.language,
-      subject: this.subject
+      board: this.content.board,
+      language: this.content.language,
+      subject: this.content.subject
     };
     this.searchService.searchContentByUserId(searchParams).subscribe(
       (apiResponse: ServerResponse) => {
+        this.showLoader = false;
         this.myCoursesList = apiResponse.result.content;
         this.pager = this.paginationService.getPager(apiResponse.result.count, this.pageNumber, this.pageLimit);
+      },
+       err => {
+        this.showLoader = false;
       }
     );
   }
@@ -90,36 +106,32 @@ export class HomeSearchComponent implements OnInit {
     this.pageNumber = page;
     this.route.navigate(['search/All', this.pageNumber], {
       queryParams: {
-        key: this.key, board: this.board,
-        language: this.language, subject: this.subject
+        key: this.key, filter: this.content.filter
       }
     });
   }
 
   ngOnInit() {
+
     Observable
       .combineLatest(
       this.activatedRoute.params,
       this.activatedRoute.queryParams,
       (params: any, queryParams: any) => {
         return {
-          page: params.pageNumber,
-          key: queryParams.key ? queryParams.key : null,
-          board: queryParams.board ? queryParams.board : null,
-          language: queryParams.language ? queryParams.language : null,
-          subject: queryParams.subject ? queryParams.subject : null
+         params: params,
+         queryParams: queryParams
         };
       })
       .subscribe(bothParams => {
-        if (bothParams.page) {
-              this.pageNumber = Number(bothParams.page);
+        if (bothParams.params.page) {
+              this.pageNumber = Number(bothParams.params.page);
             }
-        this.key = bothParams.key;
-        this.board = bothParams.board;
-        this.language = bothParams.language;
-        this.subject = bothParams.subject;
+            this.content = bothParams;
+            this.key = bothParams.queryParams.key;
         this.populateCompositeSearch(bothParams);
-        console.log('????', bothParams);
+        console.log(bothParams);
+       //  console.log('????', JSON.parse(bothParams.queryParams.filter));
       });
   }
 

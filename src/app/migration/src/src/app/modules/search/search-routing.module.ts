@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeSearchComponent} from './components';
 const routes: Routes = [
   {
-     path: 'search/All/:pageNumber', component: HomeSearchComponent, data : {some_data : true}
+     path: 'search/All/:pageNumber', component: HomeSearchComponent, data : {name: 'All'}
 
   }];
 

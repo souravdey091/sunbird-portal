@@ -2,8 +2,8 @@
     <div class="one wide column"></div>
     <div class="ten wide column">
         <div>
-            <app-home-filter></app-home-filter>
-            <div class=" ui clearing segment content-player-header search-content-header">
+            <app-home-filter [key]= "this.key"></app-home-filter>
+            <div class=" ui clearing segment content-player-header search-content-header" *ngIf="!showLoader">
                 <div class="ui left floated header margin-auto ">
                     <p class="serch-allresult">Showing results for
                         <span class="lower-case">
@@ -17,7 +17,7 @@
                     </a>
                 </h5>
             </div>
-            <div class="ui stackable four column grid dynamic-section-card ">
+            <div class="ui stackable four column grid dynamic-section-card " *ngIf="!showLoader">
                 <div class="column" *ngFor="let content of myCoursesList">
                     <app-content-card [content]="content"></app-content-card>
                 </div>
@@ -39,6 +39,9 @@
             <div class="one wide column"></div>
         </div>
         <div class="twelve wide column">
+        </div>
+        <div class="twelve wide column" *ngIf="showLoader">
+            <app-loader [data]='loaderMessage'></app-loader>
         </div>
     </div>
     <div class="one wide column"></div>

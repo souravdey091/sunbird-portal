@@ -1,6 +1,6 @@
 import { SelectFilter } from './../../interfaces/select-filter';
 import { ConfigService, ResourceService } from '@sunbird/shared';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SearchService } from '@sunbird/core';
 @Component({
@@ -10,13 +10,13 @@ import { SearchService } from '@sunbird/core';
 })
 
 export class HomeFilterComponent implements OnInit {
+  @Input() key: any;
   config: ConfigService;
   resourceService: ResourceService;
   searchService: SearchService;
   searchBoards: Array<string>;
   searchLanguages: Array<string>;
   searchSubjects: Array<string>;
-  key: string;
   pageNumber: number;
   selectedBoard: any;
   search: SelectFilter = {} ;
@@ -54,9 +54,15 @@ export class HomeFilterComponent implements OnInit {
     }
   }
   applyFilters() {
+   const filter = {
+    board: this.search.selectedBoards,
+    language: this.search.selectedMediums, subject: this.search.selectedSubjects
+    };
+    console.log(this.key);
+    const filter1 = JSON.stringify(filter);
+    console.log(filter1);
       this.router.navigate(['/search/All', 1],
-     { queryParams: {  key: this.key ? this.key : null  , board: this.search.selectedBoards,
-      language: this.search.selectedMediums, subject: this.search.selectedSubjects } });
+     { queryParams: {  key: this.key  , filter: filter1 } });
   }
 
   resetFilters() {
@@ -66,10 +72,7 @@ export class HomeFilterComponent implements OnInit {
     this.router.navigate(['/search/All', 1]);
   }
   ngOnInit() {
-  this.activatedRoute.queryParams.subscribe( params => {
-  this.key =  params.key;
-    console.log(params);
-  });
+    // console.log(this.content);
     this.searchBoards = this.config.dropDownConfig.FILTER.RESOURCES.boards;
     this.searchLanguages = this.config.dropDownConfig.FILTER.RESOURCES.languages;
     this.searchSubjects = this.config.dropDownConfig.FILTER.RESOURCES.subjects;

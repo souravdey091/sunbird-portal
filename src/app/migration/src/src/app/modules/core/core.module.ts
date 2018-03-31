@@ -1,3 +1,4 @@
+
 import { PermissionDirective } from './directives';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -7,7 +8,7 @@ import { SharedModule } from '@sunbird/shared';
 import { FormsModule } from '@angular/forms';
 import {
   UserService, LearnerService, PermissionService, AnnouncementService,
-  BadgesService, ContentService, CoursesService, PageApiService
+  BadgesService, ContentService, CoursesService, PageApiService, CommonService
 } from './services';
 import {
   MainHeaderComponent, MainMenuComponent , SearchComponent
@@ -26,7 +27,7 @@ import { AuthGuard } from './guard/auth-gard.service';
   exports: [MainHeaderComponent],
   providers: [
     LearnerService, UserService,
-    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard ]
+    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard, CommonService ]
 })
 export class CoreModule {
 }
