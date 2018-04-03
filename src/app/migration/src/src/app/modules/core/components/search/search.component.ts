@@ -16,18 +16,12 @@ export class SearchComponent implements OnInit {
   /**
    * Sui dropdown initiator
    */
-  key: string;
-  menu: string;
   isOpen: boolean;
   autosuggestData: Array<any> = [];
   searchService: SearchService;
-  selectedBoards: any;
-  selectedMediums: any;
-  selectedSubjects: any;
-  queryParam: any;
+  queryParam: any = {};
   url: string;
   value: any;
-  model: any;
   constructor(private router: Router, private activatedRoute: ActivatedRoute, searchService: SearchService) {
     this.searchService = searchService;
   }
@@ -56,17 +50,19 @@ profile: 'Users'
   }
 
   onEnter(params) {
-    console.log('????', params, this.search[this.selectedOption] );
+    console.log('params', this.queryParam, params);
+ this.queryParam['key'] = params;
+console.log('ooooo', params);
     this.url = this.search[this.selectedOption];
       this.router.navigate([this.url, 1], {
-        queryParams: {key: params, filter: this.queryParam.filter}
+        queryParams: this.queryParam
       });
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params => {
-    this.queryParam = params;
-      console.log('/.....', params);
+    this.activatedRoute.queryParams.subscribe(queryParams => {
+    this.queryParam = { ...queryParams};
+      console.log('/.....', queryParams);
     });
     this.router.events
     .filter(e => e instanceof NavigationEnd).subscribe((params: any) => {

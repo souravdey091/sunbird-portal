@@ -1,10 +1,10 @@
 import { Subscription } from 'rxjs/Subscription';
-import { ServerResponse, PaginationService , ResourceService} from '@sunbird/shared';
+import { ServerResponse, PaginationService, ResourceService } from '@sunbird/shared';
 import { SearchService, CommonService, MyServiceEvent } from '@sunbird/core';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPagination } from '@sunbird/announcement';
-import 'rxjs/add/observable/forkJoin';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { queryDef } from '@angular/core/src/view/query';
 
@@ -21,10 +21,6 @@ export class HomeSearchComponent implements OnInit {
    * Contains list of published course(s) of logged-in user
    */
   myCoursesList: Array<any> = [];
-  key: string;
-  board: Array<string>;
-  language: Array<string>;
-  subject: Array<string>;
   /**
    * To navigate to other pages
    */
@@ -57,7 +53,8 @@ export class HomeSearchComponent implements OnInit {
   * which is needed to show the pagination on inbox view
      */
   pager: IPagination;
-content: any;
+  params: any;
+  queryParams: any;
   constructor(searchService: SearchService, route: Router,
     activatedRoute: ActivatedRoute, paginationService: PaginationService,
     resourceService: ResourceService) {
@@ -69,23 +66,30 @@ content: any;
   }
 
   populateCompositeSearch(bothParams) {
+    console.log(this.queryParams.key, bothParams);
     const searchParams = {
-      contentType: ['Collection', 'TextBook', 'LessonPlan', 'Resource', 'Course'],
+      filters: {
+        contentType: ['Collection', 'TextBook', 'LessonPlan', 'Resource', 'Course'],
+        board: this.queryParams.selectedBoards,
+        language: this.queryParams.selectedMediums,
+        subject: this.queryParams.selectedSubjects
+      },
       limit: this.pageLimit,
       pageNumber: this.pageNumber,
-      query: this.content.key,
-      params: {},
-      board: this.content.board,
-      language: this.content.language,
-      subject: this.content.subject
+      query: this.queryParams.key,
+      params: {}
     };
-    this.searchService.searchContentByUserId(searchParams).subscribe(
+    this.searchService.compositeSearch(searchParams).subscribe(
       (apiResponse: ServerResponse) => {
         this.showLoader = false;
         this.myCoursesList = apiResponse.result.content;
         this.pager = this.paginationService.getPager(apiResponse.result.count, this.pageNumber, this.pageLimit);
+        _.forEach(this.myCoursesList, (item, key) => {
+          const action = { left: { displayType: 'rating' } };
+          this.myCoursesList[key].action = action;
+        });
       },
-       err => {
+      err => {
         this.showLoader = false;
       }
     );
@@ -105,33 +109,35 @@ content: any;
     }
     this.pageNumber = page;
     this.route.navigate(['search/All', this.pageNumber], {
-      queryParams: {
-        key: this.key, filter: this.content.filter
-      }
+      queryParams: this.queryParams
     });
   }
 
-  ngOnInit() {
+  onFilter(event) {
+    console.log('onfilter', event);
+    this.route.navigate(['search/All', this.pageNumber], { queryParams: event });
+  }
 
+  ngOnInit() {
+    console.log('queryPrams', this.queryParams);
     Observable
       .combineLatest(
       this.activatedRoute.params,
       this.activatedRoute.queryParams,
       (params: any, queryParams: any) => {
         return {
-         params: params,
-         queryParams: queryParams
+          params: params,
+          queryParams: queryParams
         };
       })
       .subscribe(bothParams => {
         if (bothParams.params.page) {
-              this.pageNumber = Number(bothParams.params.page);
-            }
-            this.content = bothParams;
-            this.key = bothParams.queryParams.key;
+          this.pageNumber = Number(bothParams.params.page);
+        }
+        this.params = bothParams.params;
+        this.queryParams = bothParams.queryParams;
         this.populateCompositeSearch(bothParams);
         console.log(bothParams);
-       //  console.log('????', JSON.parse(bothParams.queryParams.filter));
       });
   }
 

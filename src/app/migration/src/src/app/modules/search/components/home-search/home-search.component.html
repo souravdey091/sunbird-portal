@@ -2,7 +2,7 @@
     <div class="one wide column"></div>
     <div class="ten wide column">
         <div>
-            <app-home-filter [key]= "this.key"></app-home-filter>
+            <app-home-filter  [queryParams]="queryParams" (filter)="onFilter($event)"></app-home-filter>
             <div class=" ui clearing segment content-player-header search-content-header" *ngIf="!showLoader">
                 <div class="ui left floated header margin-auto ">
                     <p class="serch-allresult">Showing results for
@@ -19,7 +19,7 @@
             </div>
             <div class="ui stackable four column grid dynamic-section-card " *ngIf="!showLoader">
                 <div class="column" *ngFor="let content of myCoursesList">
-                    <app-content-card [content]="content"></app-content-card>
+                    <app-content-card [content]="content" ></app-content-card>
                 </div>
             </div>
         </div>

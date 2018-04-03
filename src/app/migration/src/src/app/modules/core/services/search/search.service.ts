@@ -65,10 +65,7 @@ export class SearchService {
             contentType: requestParam.contentType || ['Course'],
             mimeType: requestParam.mimeType,
             objectType: requestParam.objectType,
-            concept: requestParam.concept,
-            board: requestParam.board,
-            language: requestParam.language,
-            subject: requestParam.subject,
+            concept: requestParam.concept
           },
           limit: requestParam.limit,
           offset: (requestParam.pageNumber - 1) * requestParam.limit,
@@ -124,80 +121,26 @@ export class SearchService {
     return this._searchedOrganisationList;
   }
 
-  searchContent(requestParam: SearchParam): Observable<ServerResponse> {
+  /**
+   * Composite Search.
+   *
+   * @param {SearchParam} requestParam api request data
+  */
+  compositeSearch(requestParam: SearchParam): Observable<ServerResponse> {
     const option = {
-      url: this.config.urlConFig.URLS.CONTENT.SEARCH,
+      url: this.config.urlConFig.URLS.COMPOSITE.SEARCH,
       data: {
         request: {
-          filters: {
-            concept: requestParam.concept,
-            contentType: requestParam.contentType || ['Course'],
-            objectType: requestParam.objectType,
-            board: requestParam.channel,
-            language: requestParam.language,
-            subject: requestParam.subject,
-            gradeLevel: requestParam.gradeLevel
-          },
+          filters: requestParam.filters,
+          offset: (requestParam.pageNumber - 1) * requestParam.limit,
+          limit: requestParam.limit,
+          query: requestParam.query,
           sort_by: {
             lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
-          },
-          limit: requestParam.limit,
-          offset: requestParam.offset,
-          query: requestParam.query
+          }
         }
       }
     };
-
-    return this.content.post(option)
-    .map((data: ServerResponse) => {
-      this._searchedContentList = data.result;
-      return data;
-    });
+    return this.content.post(option);
   }
-
-  searchCourse(requestParam: SearchParam): Observable<ServerResponse> {
-    const option = {
-      url: this.config.urlConFig.URLS.COURSE.SEARCH,
-      data: {
-        request: {
-          filters: {
-            concept: requestParam.concept,
-            contentType: requestParam.contentType || ['Course'],
-            objectType: requestParam.objectType,
-            board: requestParam.channel,
-            language: requestParam.language,
-            subject: requestParam.subject,
-          },
-          sort_by: {
-            lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
-          },
-          limit: requestParam.limit,
-          offset: requestParam.offset,
-          query: requestParam.query
-        }
-      }
-    };
-
-    return this.content.post(option)
-    .map((data: ServerResponse) => {
-      this._searchedContentList = data.result;
-      return data;
-    });
-  }
-
-  // getChannel(requestParam: SearchParam) {
-  //  const  channel = requestParam.channel;
-  //  const option = {
-  //   url: this.config.urlConFig.URLS.CHANNEL.READ + channel,
-  //  };
-  //  return this.content.get(option)
-  //  .map((data: ServerResponse) => {
-  //   this._searchedContentList = data.result;
-  //   return data;
-  // });
-  // }
-
-  // getFramework() {
-
-  // }
 }

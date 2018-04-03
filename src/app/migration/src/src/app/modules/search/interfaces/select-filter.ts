@@ -1,5 +1,5 @@
 export interface SelectFilter {
-selectedBoards?: Array<string> ;
-selectedMediums?: Array<string>;
-selectedSubjects?: Array<string>;
+    boards?: Array<string> ;
+languages?: Array<string>;
+subjects?: Array<string>;
 }

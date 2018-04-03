@@ -1,6 +1,6 @@
 import { SelectFilter } from './../../interfaces/select-filter';
 import { ConfigService, ResourceService } from '@sunbird/shared';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SearchService } from '@sunbird/core';
 @Component({
@@ -10,7 +10,9 @@ import { SearchService } from '@sunbird/core';
 })
 
 export class HomeFilterComponent implements OnInit {
-  @Input() key: any;
+  @Input() queryParams: any;
+  @Output('filter')
+  filter = new EventEmitter<any>();
   config: ConfigService;
   resourceService: ResourceService;
   searchService: SearchService;
@@ -19,7 +21,7 @@ export class HomeFilterComponent implements OnInit {
   searchSubjects: Array<string>;
   pageNumber: number;
   selectedBoard: any;
-  search: SelectFilter = {} ;
+  search: SelectFilter = {};
 
   constructor(config: ConfigService, searchService: SearchService, private activatedRoute: ActivatedRoute,
     resourceService: ResourceService, private router: Router) {
@@ -28,17 +30,17 @@ export class HomeFilterComponent implements OnInit {
     this.searchService = searchService;
   }
   init() {
-    this.search.selectedBoards =  this.search.selectedBoards || [];
-    this.search.selectedMediums = this.search.selectedMediums || [];
-    this.search.selectedSubjects = this.search.selectedSubjects || [];
+    this.search.boards = this.search.boards || [];
+    this.search.languages = this.search.languages || [];
+    this.search.subjects = this.search.subjects || [];
   }
 
   selectFilter(filterType, value) {
-     this.init();
-      const itemIndex = this.search[filterType].indexOf(value);
-     if (itemIndex === -1) {
+    this.init();
+    const itemIndex = this.search[filterType].indexOf(value);
+    if (itemIndex === -1) {
       this.search[filterType].push(value);
-     } else {
+    } else {
       this.search[filterType].splice(itemIndex, 1);
     }
   }
@@ -48,31 +50,26 @@ export class HomeFilterComponent implements OnInit {
 
     } else {
       const itemIndex = this.search[filterType].indexOf(value);
-        if (itemIndex !== -1) {
-          this.search[filterType].splice(itemIndex, 1);
-        }
+      if (itemIndex !== -1) {
+        this.search[filterType].splice(itemIndex, 1);
+      }
     }
   }
   applyFilters() {
-   const filter = {
-    board: this.search.selectedBoards,
-    language: this.search.selectedMediums, subject: this.search.selectedSubjects
-    };
-    console.log(this.key);
-    const filter1 = JSON.stringify(filter);
-    console.log(filter1);
-      this.router.navigate(['/search/All', 1],
-     { queryParams: {  key: this.key  , filter: filter1 } });
+    const queryParams = this.search;
+    queryParams['key'] = this.queryParams.key;
+    console.log('??????', this.queryParams);
+    this.filter.emit(queryParams);
+    console.log('called', queryParams);
   }
 
   resetFilters() {
-    this.search.selectedBoards = [];
-    this.search.selectedMediums = [];
-    this.search.selectedSubjects = [];
+    this.search.boards = [];
+    this.search.languages = [];
+    this.search.subjects = [];
     this.router.navigate(['/search/All', 1]);
   }
   ngOnInit() {
-    // console.log(this.content);
     this.searchBoards = this.config.dropDownConfig.FILTER.RESOURCES.boards;
     this.searchLanguages = this.config.dropDownConfig.FILTER.RESOURCES.languages;
     this.searchSubjects = this.config.dropDownConfig.FILTER.RESOURCES.subjects;

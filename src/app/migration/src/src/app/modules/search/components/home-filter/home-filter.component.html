@@ -17,25 +17,25 @@
                   <div content>
                     
                       <div class="twelve wide column content margin-bottom-15" >
-                                  <span class="padded chip margin-top--5" *ngIf='search.selectedBoards && search.selectedBoards.length > 0'>
+                                  <span class="padded chip margin-top--5" *ngIf='search.boards && search.boards.length > 0'>
                                     curriculum:
-                                    <a class="ui label margin-top--5" *ngFor="let board of search.selectedBoards">
+                                    <a class="ui label margin-top--5" *ngFor="let board of search.boards">
                                       {{board}}
-                                      <i class="delete icon" (click)="removeFilterSelection('selectedBoards',board)"></i>
+                                      <i class="delete icon" (click)="removeFilterSelection('boards',board)"></i>
                                     </a>
                                   </span>
-                                  <span class="padded chip" *ngIf='search.selectedMediums && search.selectedMediums.length > 0'>
+                                  <span class="padded chip" *ngIf='search.languages && search.languages.length > 0'>
                                     {{resourceService.frmelmnts?.prmpt?.medium}}:
-                                    <a class="ui label margin-top--5" *ngFor="let language of search.selectedMediums">
+                                    <a class="ui label margin-top--5" *ngFor="let language of search.languages">
                                       {{language}}
-                                      <i class="delete icon" (click)="removeFilterSelection('selectedMediums',language)"></i>
+                                      <i class="delete icon" (click)="removeFilterSelection('languages',language)"></i>
                                     </a>
                                   </span>
-                                  <span class="padded chip margin-top--5" *ngIf='search.selectedSubjects && search.selectedSubjects.length > 0'>
+                                  <span class="padded chip margin-top--5" *ngIf='search.subjects && search.subjects.length > 0'>
                                     {{resourceService.frmelmnts?.prmpt?.subject}}:
-                                    <a class="ui label margin-top--5" *ngFor="let subject of search.selectedSubjects">
+                                    <a class="ui label margin-top--5" *ngFor="let subject of search.subjects">
                                       {{subject}}
-                                      <i class="delete icon" (click)="removeFilterSelection('selectedSubjects',subject)"></i>
+                                      <i class="delete icon" (click)="removeFilterSelection('subjects',subject)"></i>
                                     </a>
                                   </span>
                                   <!-- <span class="padded chip margin-top--5" ng-if='$root.search.selectedConcepts.length > 0'>
@@ -61,7 +61,7 @@
                             <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.curriculum}}</div>
                             <i class="dropdown icon"></i>
                             <div class="menu" suiDropdownMenu>
-                              <div class="item " (click)="selectFilter('selectedBoards',board)" *ngFor="let board of searchBoards">{{board}}</div>
+                              <div class="item " (click)="selectFilter('boards',board)" *ngFor="let board of searchBoards">{{board}}</div>
                             </div>
                           </div>
                         </div>
@@ -72,7 +72,7 @@
                             <div class="filter-sel-text"></div>
                             <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.medium}}</div>
                             <div class="menu" suiDropdownMenu>
-                              <div class="item dropdown-item" (click)="selectFilter('selectedMediums',language)" *ngFor="let language of searchLanguages">{{language}}</div>
+                              <div class="item dropdown-item" (click)="selectFilter('languages',language)" *ngFor="let language of searchLanguages">{{language}}</div>
                             </div>
                           </div>
                         </div>
@@ -83,7 +83,7 @@
                             <div class="filter-sel-text"></div>
                             <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.subject}}</div>
                             <div class="menu" suiDropdownMenu>
-                              <div class="item dropdown-item" (click)="selectFilter('selectedSubjects',subject)" *ngFor="let subject of searchSubjects">{{subject}}</div>
+                              <div class="item dropdown-item" (click)="selectFilter('subjects',subject)" *ngFor="let subject of searchSubjects">{{subject}}</div>
                             </div>
                           </div>
                         </div>
