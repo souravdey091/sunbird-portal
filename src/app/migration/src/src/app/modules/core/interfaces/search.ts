@@ -53,10 +53,10 @@ export interface SearchParam {
     * page objectType
     */
    objectType?: string[];
-   board?: string[];
    /**
     * filters param
     */
    filters?: any;
+   sort_by?: any;
 
   }

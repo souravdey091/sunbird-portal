@@ -135,9 +135,7 @@ export class SearchService {
           offset: (requestParam.pageNumber - 1) * requestParam.limit,
           limit: requestParam.limit,
           query: requestParam.query,
-          sort_by: {
-            lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
-          }
+          sort_by: requestParam.sort_by
         }
       }
     };

@@ -1,4 +1,3 @@
-export * from './common-service/common-service.service';
 export * from './user/user.service';
 export * from './content/content.service';
 export * from './learner/learner.service';

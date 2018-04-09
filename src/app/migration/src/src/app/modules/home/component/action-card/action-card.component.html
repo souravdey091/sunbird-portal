@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="sliderCards content">
-            <div class="sliderCardDesc fixedRatingCard">
+            <div class="sliderCardDesc fixedRatingCard" *ngIf="enrolledCourses.description && enrolledCourses.description.length > 0">
                 {{ enrolledCourses.description | slice:0:55 }}
                 <i *ngIf="enrolledCourses.description.length >= 55" class="ellipsis horizontal icon popup-button link" [attr.data-content]="enrolledCourses.description"
                     [attr.data-variation]="wide"></i>

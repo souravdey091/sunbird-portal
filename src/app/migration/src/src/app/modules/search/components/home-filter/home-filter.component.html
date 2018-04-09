@@ -3,7 +3,6 @@
   <div id="content-search-filter-accordion">
     <div class="ui twelve column grid">
       <div class="eleven wide column">
-
         <div class="twelve wide column title">
           <div class="ui grid">
             <div class="ten wide column">
@@ -15,96 +14,52 @@
                     <i class="dropdown icon"></i>
                   </div>
                   <div content>
-                    
-                      <div class="twelve wide column content margin-bottom-15" >
-                                  <span class="padded chip margin-top--5" *ngIf='search.boards && search.boards.length > 0'>
-                                    curriculum:
-                                    <a class="ui label margin-top--5" *ngFor="let board of search.boards">
-                                      {{board}}
-                                      <i class="delete icon" (click)="removeFilterSelection('boards',board)"></i>
-                                    </a>
-                                  </span>
-                                  <span class="padded chip" *ngIf='search.languages && search.languages.length > 0'>
-                                    {{resourceService.frmelmnts?.prmpt?.medium}}:
-                                    <a class="ui label margin-top--5" *ngFor="let language of search.languages">
-                                      {{language}}
-                                      <i class="delete icon" (click)="removeFilterSelection('languages',language)"></i>
-                                    </a>
-                                  </span>
-                                  <span class="padded chip margin-top--5" *ngIf='search.subjects && search.subjects.length > 0'>
-                                    {{resourceService.frmelmnts?.prmpt?.subject}}:
-                                    <a class="ui label margin-top--5" *ngFor="let subject of search.subjects">
-                                      {{subject}}
-                                      <i class="delete icon" (click)="removeFilterSelection('subjects',subject)"></i>
-                                    </a>
-                                  </span>
-                                  <!-- <span class="padded chip margin-top--5" ng-if='$root.search.selectedConcepts.length > 0'>
-                                    {{$root.frmelmnts.prmpt.concepts}}:
-                                    <a class="ui label margin-top--5" ng-repeat="concept in $root.search.selectedConcepts" ng-init="$last && $root.expandFilters()">
-                                      {{concept.name}}
-                                      <i class="delete icon" ng-click="$root.search.removeFilterSelection('selectedConcepts',concept.identifier)"></i>
-                                    </a>
-                                  </span> -->
-                                </div>
-                      <div class="filtercolmntext ui grid transition  ">
-                        <div class="one wide column filter-text">
-                          <span class="ShowFilterSubTitle">{{resourceService.frmelmnts?.lbl?.filterby}}</span>
-                        </div>
-                        <!-- <div class=" two wide column">
-                                    <sui-multi-select class="selection" [(ngModel)]="selectedOptions" [options]="board" [hasLabels]="!hideLabels" #multiSelect>
-                                      <sui-select-option *ngFor="let board of searchBoards" [value]="board">
-                                      </sui-select-option>
-                                    </sui-multi-select>
-                                  </div> -->
-                        <div class="two wide column">
-                          <div id="filterBoard" class="ui dropdown ui multiple selection ui filtersearch" suiDropdown>
-                            <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.curriculum}}</div>
-                            <i class="dropdown icon"></i>
-                            <div class="menu" suiDropdownMenu>
-                              <div class="item " (click)="selectFilter('boards',board)" *ngFor="let board of searchBoards">{{board}}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- medium -->
-                        <div class="two wide column">
-                          <div id="filterLang" class="ui dropdown ui multiple selection ui filtersearch" suiDropdown>
-                            <i class="dropdown icon"></i>
-                            <div class="filter-sel-text"></div>
-                            <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.medium}}</div>
-                            <div class="menu" suiDropdownMenu>
-                              <div class="item dropdown-item" (click)="selectFilter('languages',language)" *ngFor="let language of searchLanguages">{{language}}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- subjects -->
-                        <div class="two wide column">
-                          <div id="filterSub" class="ui dropdown ui multiple selection ui filtersearch" suiDropdown>
-                            <i class="dropdown icon"></i>
-                            <div class="filter-sel-text"></div>
-                            <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.subject}}</div>
-                            <div class="menu" suiDropdownMenu>
-                              <div class="item dropdown-item" (click)="selectFilter('subjects',subject)" *ngFor="let subject of searchSubjects">{{subject}}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- concept -->
-                        <!-- <div class="two wide column">
-                            <div id="filterSub" class="ui dropdown ui multiple selection ui filtersearch" suiDropdown>
-                              <i class="dropdown icon"></i>
-                              <div class="filter-sel-text"></div>
-                              <div class="filter-sel-text">{{resourceService.frmelmnts?.prmpt?.subject}}</div>
-                              <div class="menu" suiDropdownMenu>
-                                <div class="item dropdown-item" *ngFor="let subject of searchSubjects">{{subject}}</div>
-                              </div>
+                    <div class="twelve wide column content margin-bottom-15">
+                      <span *ngFor="let value of label">
+                        <span class="padded chip" *ngIf='queryParams[value] && queryParams[value].length > 0'>
+                          {{value}}:
+                          <a class="ui label margin-top--5" *ngFor="let item of queryParams[value] ">
+                            {{item}}
+                            <i class="delete icon" (click)="removeFilterSelection(value,item)"></i>
+                          </a>
+                        </span>
+                      </span>
+                    </div>
+                    <div  *ngIf = "refresh" class="filtercolmntext ui grid transition  ">
+                      <div class="one wide column filter-text">
+                        <span class="ShowFilterSubTitle">{{resourceService.frmelmnts?.lbl?.filterby}}</span>
+                      </div>
+                      <div class="two wide column ">
+                        <sui-multi-select   class="selection ui filtersearch" [(ngModel)]="queryParams.boards" [options]="options"   [hasLabels]=false #multiSelect>
+                          <sui-select-option  *ngFor="let board of searchBoards" [value]="board"> </sui-select-option>
+                        </sui-multi-select>
+                     
+                      </div>
+                      <div class="two wide column">
+                        <sui-multi-select  class="selection ui filtersearch" [(ngModel)]="queryParams.languages" [options]="options" [hasLabels]=false #multiSelect>
+                          <sui-select-option *ngFor="let language of searchLanguages" [value]="language"> </sui-select-option>
+                        <i class="dropdown icon"></i>
+                        </sui-multi-select>
+                      </div>
+                      <div class="two wide column">
+                        <sui-multi-select  class="selection ui filtersearch" [(ngModel)]="queryParams.subjects" [options]="options" [hasLabels]=false  #multiSelect>
+                          <sui-select-option *ngFor="let subject of searchSubjects" [value]="subject"> </sui-select-option>
+                        </sui-multi-select>
+                      </div>
+                      <!-- concept -->
+                      <!-- <div class="two wide column">
+                            <div class="field">
+                              <form class="conceptSelector ui form ng-pristine ng-valid">
+                                <app-concept-picker></app-concept-picker>
+                              </form>
                             </div>
                           </div> -->
-                        <!-- buttons -->
-                        <div class="three wide column filter-button">
-                          <a class="searchfilterbutton ui blue tiny  button" (click)="applyFilters()">{{resourceService.frmelmnts?.btn?.apply}}</a>
-                          <a class="searchfilterbutton ui primary tiny basic button" (click)="resetFilters()">{{resourceService.frmelmnts?.btn?.reset}}</a>
-                        </div>
+                      <!-- buttons -->
+                      <div class="three wide column filter-button">
+                        <a class="searchfilterbutton ui blue tiny  button" (click)="applyFilters()">{{resourceService.frmelmnts?.btn?.apply}}</a>
+                        <a class="searchfilterbutton ui primary tiny basic button" (click)="resetFilters()">{{resourceService.frmelmnts?.btn?.reset}}</a>
                       </div>
-              
+                    </div>
                   </div>
                 </sui-accordion-panel>
               </sui-accordion>

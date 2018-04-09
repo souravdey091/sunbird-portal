@@ -1,8 +1,9 @@
 import { SelectFilter } from './../../interfaces/select-filter';
 import { ConfigService, ResourceService } from '@sunbird/shared';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SearchService } from '@sunbird/core';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-home-filter',
   templateUrl: './home-filter.component.html',
@@ -13,63 +14,74 @@ export class HomeFilterComponent implements OnInit {
   @Input() queryParams: any;
   @Output('filter')
   filter = new EventEmitter<any>();
-  config: ConfigService;
-  resourceService: ResourceService;
-  searchService: SearchService;
+  /**
+   * To get url, app configs
+   */
+  public config: ConfigService;
+  private resourceService: ResourceService;
+  private searchService: SearchService;
+  /**
+   * To navigate to other pages
+   */
+  private router: Router;
   searchBoards: Array<string>;
   searchLanguages: Array<string>;
   searchSubjects: Array<string>;
-  pageNumber: number;
-  selectedBoard: any;
-  search: SelectFilter = {};
-
-  constructor(config: ConfigService, searchService: SearchService, private activatedRoute: ActivatedRoute,
-    resourceService: ResourceService, private router: Router) {
+  label: any;
+  refresh = true;
+  /**
+    * Constructor to create injected service(s) object
+    Default method of Draft Component class
+    * @param {Router} route Reference of Router
+    * @param {PaginationService} paginationService Reference of PaginationService
+    * @param {ConfigService} config Reference of ConfigService
+  */
+  constructor(config: ConfigService,
+    resourceService: ResourceService, router: Router) {
     this.config = config;
     this.resourceService = resourceService;
-    this.searchService = searchService;
-  }
-  init() {
-    this.search.boards = this.search.boards || [];
-    this.search.languages = this.search.languages || [];
-    this.search.subjects = this.search.subjects || [];
+    this.router = router;
   }
 
-  selectFilter(filterType, value) {
-    this.init();
-    const itemIndex = this.search[filterType].indexOf(value);
-    if (itemIndex === -1) {
-      this.search[filterType].push(value);
-    } else {
-      this.search[filterType].splice(itemIndex, 1);
-    }
-  }
 
   removeFilterSelection(filterType, value) {
+    this.refresh = false;
     if (filterType === 'selectedConcepts') {
 
     } else {
-      const itemIndex = this.search[filterType].indexOf(value);
+      const itemIndex = this.queryParams[filterType].indexOf(value);
       if (itemIndex !== -1) {
-        this.search[filterType].splice(itemIndex, 1);
+        console.log(this.queryParams[filterType], value);
+        this.queryParams[filterType].splice(itemIndex, 1);
+        console.log(this.queryParams[filterType]);
       }
     }
+    setTimeout(() => {
+      this.refresh = true;
+    }, 0);
   }
+
   applyFilters() {
-    const queryParams = this.search;
-    queryParams['key'] = this.queryParams.key;
-    console.log('??????', this.queryParams);
-    this.filter.emit(queryParams);
-    console.log('called', queryParams);
+    this.filter.emit(this.queryParams);
   }
 
   resetFilters() {
-    this.search.boards = [];
-    this.search.languages = [];
-    this.search.subjects = [];
+    this.refresh = false;
+    this.queryParams = {};
     this.router.navigate(['/search/All', 1]);
+    setTimeout(() => {
+      this.refresh = true;
+    }, 0);
   }
   ngOnInit() {
+    _.forIn(this.queryParams, (value, key) => {
+      if (typeof value === 'string') {
+        this.queryParams[key] = [value];
+      }
+    });
+    this.queryParams = { ...this.config.dropDownConfig.FILTER.SEARCH.All.DROPDOWN, ...this.queryParams };
+    console.log(this.queryParams);
+    this.label = this.config.dropDownConfig.FILTER.SEARCH.All.label;
     this.searchBoards = this.config.dropDownConfig.FILTER.RESOURCES.boards;
     this.searchLanguages = this.config.dropDownConfig.FILTER.RESOURCES.languages;
     this.searchSubjects = this.config.dropDownConfig.FILTER.RESOURCES.subjects;

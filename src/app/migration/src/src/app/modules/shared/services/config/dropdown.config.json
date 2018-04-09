@@ -228,6 +228,16 @@
                       "renderingHints": { "order": 3, "inputType": "select","width":"four"}
                     }
                 ]
+            },
+            "SEARCH": {
+               "All": {
+                    "DROPDOWN":{
+                        "boards": [],
+                        "subjects": [],
+                        "languages": []
+                    },
+                    "label":["boards","languages","subjects"]
+                }
             }
         }
 }

@@ -8,10 +8,10 @@ import { SharedModule } from '@sunbird/shared';
 import { FormsModule } from '@angular/forms';
 import {
   UserService, LearnerService, PermissionService, AnnouncementService,
-  BadgesService, ContentService, CoursesService, PageApiService, CommonService
+  BadgesService, ContentService, CoursesService, PageApiService
 } from './services';
 import {
-  MainHeaderComponent, MainMenuComponent , SearchComponent
+  MainHeaderComponent, MainMenuComponent, SearchComponent, ConceptPickerComponent
 } from './components';
 import { AuthGuard } from './guard/auth-gard.service';
 
@@ -23,11 +23,11 @@ import { AuthGuard } from './guard/auth-gard.service';
     RouterModule,
     FormsModule
   ],
-  declarations: [ MainHeaderComponent, MainMenuComponent , SearchComponent , PermissionDirective],
-  exports: [MainHeaderComponent],
+  declarations: [MainHeaderComponent, MainMenuComponent, SearchComponent, PermissionDirective, ConceptPickerComponent],
+  exports: [MainHeaderComponent, PermissionDirective],
   providers: [
     LearnerService, UserService,
-    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard, CommonService ]
+    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard]
 })
 export class CoreModule {
 }
