@@ -11,7 +11,7 @@ import {
   BadgesService, ContentService, CoursesService, PageApiService
 } from './services';
 import {
-  MainHeaderComponent, MainMenuComponent, SearchComponent, ConceptPickerComponent
+  MainHeaderComponent, MainMenuComponent, SearchComponent
 } from './components';
 import { AuthGuard } from './guard/auth-gard.service';
 
@@ -23,7 +23,7 @@ import { AuthGuard } from './guard/auth-gard.service';
     RouterModule,
     FormsModule
   ],
-  declarations: [MainHeaderComponent, MainMenuComponent, SearchComponent, PermissionDirective, ConceptPickerComponent],
+  declarations: [MainHeaderComponent, MainMenuComponent, SearchComponent, PermissionDirective],
   exports: [MainHeaderComponent, PermissionDirective],
   providers: [
     LearnerService, UserService,

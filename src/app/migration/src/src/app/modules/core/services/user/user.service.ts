@@ -95,6 +95,7 @@ export class UserService {
   private setUserProfile(res: ServerResponse) {
     const profileData = res.result.response;
     const orgRoleMap = {};
+    profileData.rootOrgAdmin = false;
     let organisationIds = [];
     let userRoles = profileData.roles;
     if (profileData.organisations) {

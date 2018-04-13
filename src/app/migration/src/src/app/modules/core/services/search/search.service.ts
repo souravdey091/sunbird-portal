@@ -5,7 +5,7 @@ import { ConfigService, ServerResponse } from '@sunbird/shared';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
-import {SearchParam} from '@sunbird/core';
+import { SearchParam } from '@sunbird/core';
 /**
  * Service to search content
  */
@@ -61,7 +61,7 @@ export class SearchService {
         request: {
           filters: {
             status: requestParam.status || ['Live'],
-           createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
+            createdBy: requestParam.params.userId ? requestParam.params.userId : this.user.userid,
             contentType: requestParam.contentType || ['Course'],
             mimeType: requestParam.mimeType,
             objectType: requestParam.objectType,
@@ -78,10 +78,10 @@ export class SearchService {
     };
 
     return this.content.post(option)
-    .map((data: ServerResponse) => {
-      this._searchedContentList = data.result;
-      return data;
-    });
+      .map((data: ServerResponse) => {
+        this._searchedContentList = data.result;
+        return data;
+      });
   }
 
   /**
@@ -109,10 +109,10 @@ export class SearchService {
     };
 
     return this.content.post(option)
-    .map((data: ServerResponse) => {
-      this._searchedOrganisationList = data.result.response;
-      return data;
-    });
+      .map((data: ServerResponse) => {
+        this._searchedOrganisationList = data.result.response;
+        return data;
+      });
   }
   /**
    * Get searched organization list
@@ -141,4 +141,23 @@ export class SearchService {
     };
     return this.content.post(option);
   }
+
+  /**
+   * User Search.
+  */
+  userSearch(requestParam: SearchParam): Observable<ServerResponse> {
+    const option = {
+      url: this.config.urlConFig.URLS.ADMIN.USER_SEARCH,
+      data: {
+        request: {
+          filters: requestParam.filters,
+          limit: requestParam.limit,
+          offset: (requestParam.pageNumber - 1) * requestParam.limit,
+          query: requestParam.query
+        }
+      }
+    };
+    return this.content.post(option);
+  }
+
 }

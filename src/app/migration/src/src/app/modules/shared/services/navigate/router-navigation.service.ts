@@ -41,6 +41,6 @@ export class RouterNavigationService {
       urlArray.push(key.path);
     });
     this.parentUrl = _.join(urlArray, '/');
-    this.route.navigate([this.parentUrl]);
+    this.route.navigate([this.parentUrl], { queryParams: activatedRoute.queryParams });
   }
 }
