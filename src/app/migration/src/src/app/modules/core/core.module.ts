@@ -14,6 +14,7 @@ import {
   MainHeaderComponent, MainMenuComponent, SearchComponent, ConceptPickerComponent
 } from './components';
 import { AuthGuard } from './guard/auth-gard.service';
+import * as $ from 'jquery';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { AuthGuard } from './guard/auth-gard.service';
     FormsModule
   ],
   declarations: [MainHeaderComponent, MainMenuComponent, SearchComponent, PermissionDirective, ConceptPickerComponent],
-  exports: [MainHeaderComponent, PermissionDirective],
+  exports: [MainHeaderComponent, PermissionDirective, ConceptPickerComponent],
   providers: [
     LearnerService, UserService,
     PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard]

@@ -1,6 +1,7 @@
+
 import { SelectFilter } from './../../interfaces/select-filter';
 import { ConfigService, ResourceService } from '@sunbird/shared';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ApplicationRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchService } from '@sunbird/core';
 import * as _ from 'lodash';
@@ -37,25 +38,37 @@ export class HomeFilterComponent implements OnInit {
     * @param {ConfigService} config Reference of ConfigService
   */
   constructor(config: ConfigService,
-    resourceService: ResourceService, router: Router) {
+    resourceService: ResourceService, router: Router,  private cdr: ChangeDetectorRef) {
     this.config = config;
     this.resourceService = resourceService;
     this.router = router;
   }
 
+  concepts(events) {
+    const name = [];
+    _.forEach( events, (item, key) => {
+      console.log(events[key].name);
+      name.push(events[key].name);
+      console.log(name);
+    });
+    this.queryParams['Concepts']  = name;
+  console.log(this.queryParams['Concepts']);
+  }
 
   removeFilterSelection(filterType, value) {
     this.refresh = false;
     if (filterType === 'selectedConcepts') {
-
+    // for concept picker
     } else {
       const itemIndex = this.queryParams[filterType].indexOf(value);
       if (itemIndex !== -1) {
         console.log(this.queryParams[filterType], value);
         this.queryParams[filterType].splice(itemIndex, 1);
         console.log(this.queryParams[filterType]);
+       // this.cdr.detectChanges();
       }
     }
+   /// this.appRef.tick();
     setTimeout(() => {
       this.refresh = true;
     }, 0);
