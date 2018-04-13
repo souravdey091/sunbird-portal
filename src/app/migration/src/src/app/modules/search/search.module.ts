@@ -1,3 +1,4 @@
+import { CoreModule } from '@sunbird/core';
 import { SharedModule } from '@sunbird/shared';
 import { SearchRoutingModule } from './search-routing.module';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,8 @@ import { UserSearchService } from './services';
     SearchRoutingModule,
     SharedModule,
     SuiModule,
-    FormsModule
+    FormsModule,
+    CoreModule
   ],
   declarations: [ HomeSearchComponent, HomeFilterComponent, UserSearchComponent,
   UserFilterComponent, UserEditComponent, UserDeleteComponent],

@@ -270,6 +270,51 @@
                     }
                 }
             ],
+            "roles": [
+                {
+                    "key": "Announcement Sender",
+                    "value": "ANNOUNCEMENT_SENDER"
+                },
+                {
+                    "key": "Book Creator",
+                    "value": "BOOK_CREATOR"
+                },
+                {
+                    "key": "Book Reviewer",
+                    "value": "BOOK_REVIEWER"
+                },
+                {
+                    "key": "Content Creator",
+                    "value": "CONTENT_CREATOR"
+                },
+                {
+                    "key": "Content Reviewer",
+                    "value": "CONTENT_REVIEWER"
+                },
+                {
+                    "key": "Course Mentor",
+                    "value": "COURSE_MENTOR"
+                },
+                {
+                    "key": "Flag Reviewer",
+                    "value": "FLAG_REVIEWER"
+                },
+                {
+                    "key": "Official TextBook Badge Issuer",
+                    "value": "OFFICIAL_TEXTBOOK_BADGE_ISSUER"
+                },
+                {
+                    "key": "Org Admin",
+                    "value": "ORG_ADMIN"
+                },
+                {
+                    "key": "Public",
+                    "value": "PUBLIC"
+                },
+                {
+                    "key": "Teacher Badge Issuer",
+                    "value": "TEACHER_BADGE_ISSUER"
+                }],
             "Library": [
                 {
                     "code": "concept",
@@ -355,55 +400,25 @@
                         "width": "four"
                     }
                 }
-            ],
-            "roles": [
-                {
-                    "key": "Announcement Sender",
-                    "value": "ANNOUNCEMENT_SENDER"
-                },
-                {
-                    "key": "Book Creator",
-                    "value": "BOOK_CREATOR"
-                },
-                {
-                    "key": "Book Reviewer",
-                    "value": "BOOK_REVIEWER"
-                },
-                {
-                    "key": "Content Creator",
-                    "value": "CONTENT_CREATOR"
-                },
-                {
-                    "key": "Content Reviewer",
-                    "value": "CONTENT_REVIEWER"
-                },
-                {
-                    "key": "Course Mentor",
-                    "value": "COURSE_MENTOR"
-                },
-                {
-                    "key": "Flag Reviewer",
-                    "value": "FLAG_REVIEWER"
-                },
-                {
-                    "key": "Official TextBook Badge Issuer",
-                    "value": "OFFICIAL_TEXTBOOK_BADGE_ISSUER"
-                },
-                {
-                    "key": "Org Admin",
-                    "value": "ORG_ADMIN"
-                },
-                {
-                    "key": "Public",
-                    "value": "PUBLIC"
-                },
-                {
-                    "key": "Teacher Badge Issuer",
-                    "value": "TEACHER_BADGE_ISSUER"
-                }
             ]
         },
         "SEARCH": {
+            "search": {
+                "All": "/search/All",
+                "home": "/search/All",
+                "learn": "/search/Courses",
+                "Courses": "/search/Courses",
+                "resources": "/search/Library",
+                "Library": "/search/Library",
+                "Users": "/search/Users",
+                "profile": "/search/Users"
+            },
+            "searchUrl": {
+                "home": "All",
+                "learn": "Courses",
+                "resources": "Library",
+                "profile": "Users"
+            },
             "All": {
                 "DROPDOWN": {
                     "boards": [],
@@ -427,7 +442,9 @@
                     "Grades",
                     "Medium",
                     "Subjects",
-                    "Roles"
+                    "Roles",
+                    "subjects",
+                    "Concepts"
                 ]
             }
         }

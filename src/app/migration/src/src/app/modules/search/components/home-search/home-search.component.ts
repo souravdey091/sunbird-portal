@@ -1,6 +1,6 @@
 import { ServerResponse, PaginationService, ResourceService, ConfigService, ToasterService, INoResultMessage } from '@sunbird/shared';
 import { SearchService } from '@sunbird/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPagination } from '@sunbird/announcement';
 import * as _ from 'lodash';
@@ -91,7 +91,7 @@ export class HomeSearchComponent implements OnInit {
    */
   constructor(searchService: SearchService, route: Router,
     activatedRoute: ActivatedRoute, paginationService: PaginationService,
-    resourceService: ResourceService, toasterService: ToasterService,
+    resourceService: ResourceService, toasterService: ToasterService, public ngZone: NgZone,
     config: ConfigService) {
     this.searchService = searchService;
     this.route = route;
@@ -113,6 +113,8 @@ export class HomeSearchComponent implements OnInit {
         board: this.queryParams.boards,
         language: this.queryParams.languages,
         subject: this.queryParams.subjects
+      //  concepts: this.queryParams.Concepts
+
       },
       limit: this.pageLimit,
       pageNumber: this.pageNumber,
@@ -166,8 +168,13 @@ export class HomeSearchComponent implements OnInit {
   }
 
   onFilter(event) {
-    console.log('onfilter', event);
-    this.route.navigate(['search/All', this.pageNumber], { queryParams: event });
+    const queryParams = {};
+    _.forIn(event, (value, key) => {
+      if (value.length > 0) {
+        queryParams[key] = value;
+      }
+    });
+    this.route.navigate(['/search/All', 1], { queryParams: queryParams});
     console.log('got trigger');
   }
 
@@ -187,7 +194,6 @@ export class HomeSearchComponent implements OnInit {
           this.pageNumber = Number(bothParams.params.pageNumber);
         }
         this.queryParams = { ...bothParams.queryParams };
-
         this.populateCompositeSearch();
         console.log(bothParams);
       });
