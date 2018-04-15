@@ -142,7 +142,7 @@ export class UserSearchComponent implements OnInit {
           this.totalCount = apiResponse.result.response.count;
           this.populateOrgNameAndSetRoles();
           console.log('this.searchList-mig', this.searchList);
-          this.pager = this.paginationService.getPager(apiResponse.result.count, this.pageNumber, this.pageLimit);
+          this.pager = this.paginationService.getPager(apiResponse.result.response.count, this.pageNumber, this.pageLimit);
         } else {
           this.noResult = true;
           this.showLoader = false;

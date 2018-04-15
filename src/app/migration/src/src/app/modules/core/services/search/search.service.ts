@@ -160,4 +160,22 @@ export class SearchService {
     return this.content.post(option);
   }
 
+  /**
+   * User Search.
+  */
+  orgSearch(requestParam: SearchParam): Observable<ServerResponse> {
+    const option = {
+      url: this.config.urlConFig.URLS.ADMIN.ORG_SEARCH,
+      data: {
+        request: {
+          filters: requestParam.filters,
+          limit: requestParam.limit,
+          offset: (requestParam.pageNumber - 1) * requestParam.limit,
+          query: requestParam.query
+        }
+      }
+    };
+    return this.content.post(option);
+  }
+
 }

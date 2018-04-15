@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeSearchComponent, UserSearchComponent, UserEditComponent, UserDeleteComponent } from './components';
+import { HomeSearchComponent, UserSearchComponent, UserEditComponent, UserDeleteComponent, OrgSearchComponent } from './components';
 const routes: Routes = [
   {
     path: 'search/All/:pageNumber', component: HomeSearchComponent, data: { name: 'All' }
@@ -13,7 +13,10 @@ const routes: Routes = [
      { path: 'delete/:userId', component: UserDeleteComponent, data: { name: 'Users' } }
     ]
 
-  }
+  },
+  {
+    path: 'search/Organisations/:pageNumber', component: OrgSearchComponent, data: { name: 'Organisations' }
+  },
 
 ];
 

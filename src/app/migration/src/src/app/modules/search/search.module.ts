@@ -11,6 +11,8 @@ import { UserFilterComponent } from './components/user-filter/user-filter.compon
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { UserSearchService } from './services';
+import { OrgSearchComponent } from './components/org-search/org-search.component';
+import { OrgFilterComponent } from './components/org-filter/org-filter.component';
 
 @NgModule({
   imports: [
@@ -22,7 +24,7 @@ import { UserSearchService } from './services';
     CoreModule
   ],
   declarations: [ HomeSearchComponent, HomeFilterComponent, UserSearchComponent,
-  UserFilterComponent, UserEditComponent, UserDeleteComponent],
+  UserFilterComponent, UserEditComponent, UserDeleteComponent, OrgSearchComponent, OrgFilterComponent],
   providers: [UserSearchService]
 })
 export class SearchModule { }

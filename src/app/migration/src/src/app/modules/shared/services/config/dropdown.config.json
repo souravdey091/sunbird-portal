@@ -411,7 +411,8 @@
                 "resources": "/search/Library",
                 "Library": "/search/Library",
                 "Users": "/search/Users",
-                "profile": "/search/Users"
+                "profile": "/search/Users",
+                "Organisations": "/search/Organisations"
             },
             "searchUrl": {
                 "home": "All",
@@ -428,7 +429,8 @@
                 "label": [
                     "boards",
                     "languages",
-                    "subjects"
+                    "subjects",
+                    "Concepts"
                 ]
             },
             "Users": {
@@ -442,9 +444,15 @@
                     "Grades",
                     "Medium",
                     "Subjects",
-                    "Roles",
-                    "subjects",
-                    "Concepts"
+                    "Roles"
+                ]
+            },
+            "Organisations": {
+                "DROPDOWN": {
+                    "OrgType": []
+                },
+                "label": [
+                    "OrgType"
                 ]
             }
         }
