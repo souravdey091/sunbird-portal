@@ -8,7 +8,7 @@ import { SharedModule } from '@sunbird/shared';
 import { FormsModule } from '@angular/forms';
 import {
   UserService, LearnerService, PermissionService, AnnouncementService,
-  BadgesService, ContentService, CoursesService, PageApiService
+  BadgesService, ContentService, CoursesService, PageApiService, ConceptPickerService
 } from './services';
 import {
   MainHeaderComponent, MainMenuComponent, SearchComponent, ConceptPickerComponent
@@ -28,7 +28,7 @@ import * as $ from 'jquery';
   exports: [MainHeaderComponent, PermissionDirective, ConceptPickerComponent],
   providers: [
     LearnerService, UserService,
-    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard]
+    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard, ConceptPickerService]
 })
 export class CoreModule {
 }

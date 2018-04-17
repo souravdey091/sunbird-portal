@@ -1,7 +1,5 @@
 <div>
   <div class="ui divider header-search-filters-divider"></div>
-  
-    
           <div class="ui grid">
             <div class="twelve wide column">
               <sui-accordion [closeOthers]="false">
@@ -16,10 +14,17 @@
                       <span *ngFor="let value of label">
                         <span class="padded chip" *ngIf='queryParams[value] && queryParams[value].length > 0'>
                           {{value}}:
-                          <a class="ui label margin-top--5" *ngFor="let item of queryParams[value] ">
-                            {{item}}
-                            <i class="delete icon" (click)="removeFilterSelection(value,item)"></i>
-                          </a>
+                          <span *ngFor="let item of queryParams[value] ">
+                            <a class="ui label margin-top--5" *ngIf='!isNumber(item)'>
+                              {{item}}
+                              <i class="delete icon" (click)="removeFilterSelection(value,item)"></i>
+                            </a>
+                            <a class="ui label margin-top--5" *ngIf='isNumber(item)'>
+                              {{item.name}}
+                              <i class="delete icon" (click)="removeFilterSelection(value,item)"></i>
+                            </a>
+                          </span>
+                          
                         </span>
                       </span>
                     </div>
@@ -28,19 +33,19 @@
                         <span class="ShowFilterSubTitle">{{resourceService.frmelmnts?.lbl?.filterby}}</span>
                       </div>
                       <div class="two wide column ">
-                        <sui-multi-select   class="selection ui filtersearch" [(ngModel)]="queryParams.boards" [options]="options"   [hasLabels]=false #multiSelect>
+                        <sui-multi-select   class="selection ui filtersearch" [(ngModel)]="queryParams.Curriculum" [options]="options"   [hasLabels]=false #multiSelect>
                           <sui-select-option  *ngFor="let board of searchBoards" [value]="board"> </sui-select-option>
                         </sui-multi-select>
                      
                       </div>
                       <div class="two wide column">
-                        <sui-multi-select  class="selection ui filtersearch" [(ngModel)]="queryParams.languages" [options]="options" [hasLabels]=false #multiSelect>
+                        <sui-multi-select  class="selection ui filtersearch" [(ngModel)]="queryParams.Medium" [options]="options" [hasLabels]=false #multiSelect>
                           <sui-select-option *ngFor="let language of searchLanguages" [value]="language"> </sui-select-option>
                         <i class="dropdown icon"></i>
                         </sui-multi-select>
                       </div>
                       <div class="two wide column">
-                        <sui-multi-select  class="selection ui filtersearch" [(ngModel)]="queryParams.subjects" [options]="options" [hasLabels]=false  #multiSelect>
+                        <sui-multi-select  class="selection ui filtersearch" [(ngModel)]="queryParams.Subjects" [options]="options" [hasLabels]=false  #multiSelect>
                           <sui-select-option *ngFor="let subject of searchSubjects" [value]="subject"> </sui-select-option>
                         </sui-multi-select>
                       </div>

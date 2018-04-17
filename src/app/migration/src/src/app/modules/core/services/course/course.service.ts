@@ -45,14 +45,13 @@ export class CoursesService {
     this.config = config;
     this.userService = userService;
     this.learnerService = learnerService;
-    this.userid = this.userService.userid;
   }
   /**
    *  api call for enrolled courses.
    */
   public getEnrolledCourses() {
     const option = {
-      url: this.config.urlConFig.URLS.COURSE.GET_ENROLLED_COURSES + '/' + this.userid
+      url: this.config.urlConFig.URLS.COURSE.GET_ENROLLED_COURSES + '/' + this.userService.userid
     };
     this.learnerService.get(option).subscribe(
       (apiResponse: ServerResponse) => {

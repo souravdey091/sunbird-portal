@@ -1,7 +1,7 @@
 import { ResourceService } from '@sunbird/shared';
 import { Component } from '@angular/core';
 
-import { UserService, PermissionService, CoursesService } from '@sunbird/core';
+import { UserService, PermissionService, CoursesService, ConceptPickerService } from '@sunbird/core';
 import { Ng2IziToastModule } from 'ng2-izitoast';
 /**
  * main app component
@@ -26,19 +26,23 @@ export class AppComponent {
    */
   public resourceService: ResourceService;
   public courseService: CoursesService;
+  public conceptPickerService: ConceptPickerService;
   /**
    * constructor
    */
   constructor(userService: UserService,
     permissionService: PermissionService, resourceService: ResourceService,
-     courseService: CoursesService) {
+     courseService: CoursesService, conceptPickerService: ConceptPickerService) {
       this.resourceService = resourceService;
       this.permissionService = permissionService;
       this.userService = userService;
       this.courseService = courseService;
+      this.conceptPickerService = conceptPickerService;
       userService.initialize();
       permissionService.initialize();
       resourceService.initialize();
       courseService.initialize();
+      conceptPickerService.initialize();
+
   }
 }
