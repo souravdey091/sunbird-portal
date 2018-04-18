@@ -110,11 +110,10 @@ export class HomeSearchComponent implements OnInit {
     const searchParams = {
       filters: {
         contentType: ['Collection', 'TextBook', 'LessonPlan', 'Resource', 'Course'],
-        board: this.queryParams.boards,
-        language: this.queryParams.languages,
-        subject: this.queryParams.subjects
-      //  concepts: this.queryParams.Concepts
-
+        board: this.queryParams.Curriculum,
+        language: this.queryParams.Medium,
+        subject: this.queryParams.Subjects,
+        concepts: this.queryParams.Concepts
       },
       limit: this.pageLimit,
       pageNumber: this.pageNumber,
@@ -167,16 +166,16 @@ export class HomeSearchComponent implements OnInit {
     });
   }
 
-  onFilter(event) {
-    const queryParams = {};
-    _.forIn(event, (value, key) => {
-      if (value.length > 0) {
-        queryParams[key] = value;
-      }
-    });
-    this.route.navigate(['/search/All', 1], { queryParams: queryParams});
-    console.log('got trigger');
-  }
+  // onFilter(event) {
+  //   const queryParams = {};
+  //   _.forIn(event, (value, key) => {
+  //     if (value.length > 0) {
+  //       queryParams[key] = value;
+  //     }
+  //   });
+  //   this.route.navigate(['/search/All', 1], { queryParams: queryParams});
+  //   console.log('got trigger');
+  // }
 
   ngOnInit() {
     Observable

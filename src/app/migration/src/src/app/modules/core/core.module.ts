@@ -8,8 +8,8 @@ import { SharedModule } from '@sunbird/shared';
 import { FormsModule } from '@angular/forms';
 
 import {
-  UserService, LearnerService, PermissionService, AnnouncementService,
-  BadgesService, ContentService, CoursesService, PageApiService
+  UserService, LearnerService, PermissionService, AnnouncementService,  ConceptPickerService,
+  BadgesService, ContentService, CoursesService, PageApiService, TelemetryService, TelemetryLibUtilService
 } from './services';
 import {
   MainHeaderComponent, MainMenuComponent, SearchComponent, ConceptPickerComponent
@@ -29,7 +29,8 @@ import * as $ from 'jquery';
   exports: [MainHeaderComponent, PermissionDirective, ConceptPickerComponent],
   providers: [
     LearnerService, UserService,
-    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard]
+    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService,
+    AuthGuard, TelemetryService, TelemetryLibUtilService, ConceptPickerService]
 })
 export class CoreModule {
 }

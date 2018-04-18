@@ -1,6 +1,6 @@
 import { ServerResponse, PaginationService, ResourceService, ConfigService, ToasterService, INoResultMessage } from '@sunbird/shared';
 import { SearchService, UserService } from '@sunbird/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPagination } from '@sunbird/announcement';
 import * as _ from 'lodash';
@@ -99,7 +99,7 @@ export class UserSearchComponent implements OnInit {
      * @param {ActivatedRoute} activatedRoute Reference of ActivatedRoute
      * @param {ConfigService} config Reference of ConfigService
    */
-  constructor(searchService: SearchService, route: Router,
+  constructor(searchService: SearchService, route: Router, private ngZone: NgZone,
     activatedRoute: ActivatedRoute, paginationService: PaginationService,
     resourceService: ResourceService, toasterService: ToasterService,
     config: ConfigService, user: UserService, userSearchService: UserSearchService) {
@@ -196,7 +196,7 @@ export class UserSearchComponent implements OnInit {
               }
             }
             const orgNameAndId = _.find(orgApiResponse.result.response.content, function (organisation) {
-              return organisation.id === organisation.organisationId;
+              return organisation.id === org.organisationId;
             });
             if (orgNameAndId) { org.orgName = orgNameAndId.orgName; }
           });
@@ -259,8 +259,16 @@ export class UserSearchComponent implements OnInit {
   }
 
   onFilter(event) {
+   event = _.cloneDeep(event);
     console.log('onfilter', event);
-    this.route.navigate(['search/Users', this.pageNumber], { queryParams: event });
+    const url = 'search/Users/' + this.pageNumber;
+    this.ngZone.run(() => {
+      this.route.navigate(['search/Users', this.pageNumber], {queryParams : event}).then(() => {
+        console.log('navigate true');
+      }).catch((err) => {
+        console.log('navigate false', err);
+  });
+    });
     console.log('got trigger');
   }
 

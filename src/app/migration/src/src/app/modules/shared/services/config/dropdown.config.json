@@ -272,48 +272,48 @@
             ],
             "roles": [
                 {
-                    "key": "Announcement Sender",
-                    "value": "ANNOUNCEMENT_SENDER"
+                    "name": "Announcement Sender",
+                    "id": "ANNOUNCEMENT_SENDER"
                 },
                 {
-                    "key": "Book Creator",
-                    "value": "BOOK_CREATOR"
+                    "name": "Book Creator",
+                    "id": "BOOK_CREATOR"
                 },
                 {
-                    "key": "Book Reviewer",
-                    "value": "BOOK_REVIEWER"
+                    "name": "Book Reviewer",
+                    "id": "BOOK_REVIEWER"
                 },
                 {
-                    "key": "Content Creator",
-                    "value": "CONTENT_CREATOR"
+                    "name": "Content Creator",
+                    "id": "CONTENT_CREATOR"
                 },
                 {
-                    "key": "Content Reviewer",
-                    "value": "CONTENT_REVIEWER"
+                    "name": "Content Reviewer",
+                    "id": "CONTENT_REVIEWER"
                 },
                 {
-                    "key": "Course Mentor",
-                    "value": "COURSE_MENTOR"
+                    "name": "Course Mentor",
+                    "id": "COURSE_MENTOR"
                 },
                 {
-                    "key": "Flag Reviewer",
-                    "value": "FLAG_REVIEWER"
+                    "name": "Flag Reviewer",
+                    "id": "FLAG_REVIEWER"
                 },
                 {
-                    "key": "Official TextBook Badge Issuer",
-                    "value": "OFFICIAL_TEXTBOOK_BADGE_ISSUER"
+                    "name": "Official TextBook Badge Issuer",
+                    "id": "OFFICIAL_TEXTBOOK_BADGE_ISSUER"
                 },
                 {
-                    "key": "Org Admin",
-                    "value": "ORG_ADMIN"
+                    "name": "Org Admin",
+                    "id": "ORG_ADMIN"
                 },
                 {
-                    "key": "Public",
-                    "value": "PUBLIC"
+                    "name": "Public",
+                    "id": "PUBLIC"
                 },
                 {
-                    "key": "Teacher Badge Issuer",
-                    "value": "TEACHER_BADGE_ISSUER"
+                    "name": "Teacher Badge Issuer",
+                    "id": "TEACHER_BADGE_ISSUER"
                 }],
             "Library": [
                 {
@@ -422,14 +422,14 @@
             },
             "All": {
                 "DROPDOWN": {
-                    "boards": [],
-                    "subjects": [],
-                    "languages": []
+                    "Curriculum": [],
+                    "Subjects": [],
+                    "Medium": []
                 },
                 "label": [
-                    "boards",
-                    "languages",
-                    "subjects",
+                    "Curriculum",
+                    "Medium",
+                    "Subjects",
                     "Concepts"
                 ]
             },

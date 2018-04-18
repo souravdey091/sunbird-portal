@@ -1,4 +1,7 @@
 {
+    "TELEMETRY": {
+        "MAX_BATCH_SIZE": 10
+    },
     "WORKSPACE": {
         "PAGE_LIMIT": 9,
         "contentType": [
@@ -15,8 +18,49 @@
         "objectType": "Content",
         "lastUpdatedOn": "desc"
     },
+    "EDITOR_CONFIG": {
+        "collectionState": [
+            "UpForReviewContent",
+            "ReviewContent",
+            "PublishedContent",
+            "FlaggedContent",
+            "LimitedPublishedContent"
+        ],
+        "collectionStatus": [
+            "Review",
+            "Draft",
+            "Live",
+            "Flagged",
+            "Unlisted"
+        ],
+        "mimeCollection": "application/vnd.ekstep.content-collection",
+        "editorQS": "createdBy,status,mimeType",
+        "MODE": "edit",
+        "contentState": [
+            "UpForReviewContent",
+            "ReviewContent",
+            "PublishedContent",
+            "LimitedPublishedContent"
+        ],
+        "contentStatus": [
+            "Review",
+            "Draft",
+            "Live",
+            "Unlisted"
+        ]
+    },
+    "CONTENT_CONST": {
+        "CREATE_LESSON": "application/vnd.ekstep.ecml-archive"
+    },
+    "APPID_EKSTEPENV": "get/envData",
     "SEARCH": {
-        "PAGE_LIMIT": 20
+        "PAGE_LIMIT": 20,
+        "USER": {
+            "DOWNLOAD_BUTTON": "FALSE"
+        },
+        "ORGANISATION": {
+            "DOWNLOAD_BUTTON": "TRUE"
+        }
     },
     "ANNOUNCEMENT": {
         "HOME": {

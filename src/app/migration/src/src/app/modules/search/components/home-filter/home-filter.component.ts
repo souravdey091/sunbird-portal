@@ -1,8 +1,6 @@
-
-import { SelectFilter } from './../../interfaces/select-filter';
 import { ConfigService, ResourceService } from '@sunbird/shared';
 import { Component, OnInit, Input, Output, EventEmitter, ApplicationRef, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SearchService } from '@sunbird/core';
 import * as _ from 'lodash';
 @Component({
@@ -38,53 +36,57 @@ export class HomeFilterComponent implements OnInit {
     * @param {ConfigService} config Reference of ConfigService
   */
   constructor(config: ConfigService,
-    resourceService: ResourceService, router: Router,  private cdr: ChangeDetectorRef) {
+    resourceService: ResourceService, router: Router, private activatedRoute: ActivatedRoute, private cdr: ChangeDetectorRef) {
     this.config = config;
     this.resourceService = resourceService;
     this.router = router;
   }
-
   concepts(events) {
     const name = [];
-    _.forEach( events, (item, key) => {
-      console.log(events[key].name);
-      name.push(events[key].name);
-      console.log(name);
+    _.forEach(events, (item, key) => {
+      name.push(events[key].identifier);
+      this.isNumber(item);
+      console.log(typeof item, item);
     });
-    this.queryParams['Concepts']  = name;
-  console.log(this.queryParams['Concepts']);
+    this.queryParams['Concepts'] = events;
   }
-
+ isNumber(val) { return typeof val === 'object'; }
   removeFilterSelection(filterType, value) {
-    this.refresh = false;
-    if (filterType === 'selectedConcepts') {
-    // for concept picker
-    } else {
-      const itemIndex = this.queryParams[filterType].indexOf(value);
-      if (itemIndex !== -1) {
-        console.log(this.queryParams[filterType], value);
-        this.queryParams[filterType].splice(itemIndex, 1);
-        console.log(this.queryParams[filterType]);
-       // this.cdr.detectChanges();
-      }
-    }
-   /// this.appRef.tick();
-    setTimeout(() => {
+    const itemIndex = this.queryParams[filterType].indexOf(value);
+    if (itemIndex !== -1) {
+      console.log(this.queryParams[filterType], value);
+      this.queryParams[filterType].splice(itemIndex, 1);
+      console.log(this.queryParams[filterType]);
+      this.refresh = false;
+      this.cdr.detectChanges();
       this.refresh = true;
-    }, 0);
+    }
   }
 
   applyFilters() {
-    this.filter.emit(this.queryParams);
+    const queryParams = {};
+    _.forIn(this.queryParams, (value, key) => {
+      if (value.length > 0) {
+        queryParams[key] = value;
+        console.log('apply', key , value);
+      }
+    });
+    _.forEach( this.queryParams['Concepts'], (item, key) => {
+      this.queryParams['Concepts'][key] = item.identifier;
+      console.log(this.queryParams['Concepts'][key]);
+    });
+    console.log('queryPrams', queryParams);
+    this.queryParams = queryParams;
+    this.router.navigate(['/search/All', 1], { queryParams: this.queryParams });
   }
 
+
   resetFilters() {
-    this.refresh = false;
     this.queryParams = {};
     this.router.navigate(['/search/All', 1]);
-    setTimeout(() => {
-      this.refresh = true;
-    }, 0);
+    this.refresh = false;
+    this.cdr.detectChanges();
+    this.refresh = true;
   }
   ngOnInit() {
     _.forIn(this.queryParams, (value, key) => {
@@ -93,7 +95,6 @@ export class HomeFilterComponent implements OnInit {
       }
     });
     this.queryParams = { ...this.config.dropDownConfig.FILTER.SEARCH.All.DROPDOWN, ...this.queryParams };
-    console.log(this.queryParams);
     this.label = this.config.dropDownConfig.FILTER.SEARCH.All.label;
     this.searchBoards = this.config.dropDownConfig.FILTER.RESOURCES.boards;
     this.searchLanguages = this.config.dropDownConfig.FILTER.RESOURCES.languages;

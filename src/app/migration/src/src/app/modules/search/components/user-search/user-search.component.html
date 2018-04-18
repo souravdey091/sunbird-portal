@@ -18,7 +18,7 @@
         </h5>
       </div>
 
-      <div class=" ui clearing segment" *ngIf="!showLoader && !noResult">
+      <div class=" ui clearing segment" *ngIf="!showLoader && !noResult && config.appConfig.SEARCH.USER.DOWNLOAD_BUTTON === 'TRUE'">
         <div class="ui right floated primary button" (click)="downloadUser();">
           {{resourceService.frmelmnts?.btn?.download}}
         </div>
@@ -33,11 +33,12 @@
                   <img [src]="user.avatar || './assets/common/images/user_logo.png'">
                 </div>
                 <div class="content ">
-                  <a class="header " (click)="user.status===1 && admin.openPublicProfile(user.identifier,user)">{{user.firstName}} &nbsp;{{user.lastName}}</a>
+                  <a class="header " [queryParams]="queryParams" [routerLink]="['view/' + user.id]" (click)="user.status===1 && userSearchService.userDetailsObject=user">{{user.firstName}} &nbsp;{{user.lastName}}</a>
 
-                  <a *ngIf="user.status===1 && user.isEditableProfile" class="float-ContentRight">
+                  <!--<a *ngIf="user.status===1 && user.isEditableProfile" class="float-ContentRight">-->
+                  <a class="float-ContentRight">
                     <!-- update user roles -->
-                    <span (click)="admin.showModal(user.identifier,user.organisations);">
+                    <span [queryParams]="queryParams" [routerLink]="['edit/' + user.id]" (click)="user.status===1 && userSearchService.userDetailsObject=user">
                 <i class="edit icon editIcon-fontSize"></i>
               </span>
                     <!-- delete user -->

@@ -55,6 +55,21 @@ export class UserSearchService {
    // return this.learnerService.post(option);
   }
 
+  updateRoles(requestParam) {
+    const option = {
+      url: this.config.urlConFig.URLS.ADMIN.UPDATE_USER_ORG_ROLES,
+      data: {
+          'request': {
+            'userId': requestParam.userId,
+            'organisationId': requestParam.orgId,
+            'roles': requestParam.roles
+          }
+        }
+    };
+
+    return this.learnerService.post(option);
+  }
+
   getUserById(requestParam) {
     const option = {
       url: this.config.urlConFig.URLS.USER.GET_PROFILE + requestParam.userId
