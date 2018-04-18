@@ -123,7 +123,6 @@ export class OrgSearchComponent implements OnInit {
           this.noResult = false;
           this.searchList = apiResponse.result.response.content;
           this.totalCount = apiResponse.result.response.count;
-          console.log('this.searchList', this.searchList);
           this.pager = this.paginationService.getPager(apiResponse.result.response.count, this.pageNumber, this.pageLimit);
         } else {
           this.noResult = true;
@@ -190,7 +189,6 @@ export class OrgSearchComponent implements OnInit {
       }
     });
     this.route.navigate(['/search/Organisations', 1], { queryParams: queryParams });
-    console.log('got trigger');
   }
 
   ngOnInit() {
@@ -210,7 +208,6 @@ export class OrgSearchComponent implements OnInit {
         }
         this.queryParams = { ...bothParams.queryParams };
         this.populateOrgSearch();
-        console.log(bothParams);
       });
   }
 

@@ -287,7 +287,7 @@ export class UserSearchComponent implements OnInit {
               this.pageNumber = Number(bothParams.params.pageNumber);
             }
             this.queryParams = { ...bothParams.queryParams };
-
+            console.log(this.queryParams);
             this.populateUserSearch();
             console.log(bothParams);
           });
