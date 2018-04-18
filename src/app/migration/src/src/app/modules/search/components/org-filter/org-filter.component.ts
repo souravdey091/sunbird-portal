@@ -1,4 +1,3 @@
-import { SelectFilter } from './../../interfaces/select-filter';
 import { ConfigService, ResourceService } from '@sunbird/shared';
 import { Component, OnInit, Input, Output, EventEmitter, ApplicationRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';

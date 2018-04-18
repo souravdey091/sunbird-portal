@@ -22,6 +22,9 @@ export class UserEditComponent implements OnInit {
   userId: string;
 
   selectedOrgName: string;
+  selectedOrgId: string;
+  selectedOrgUserRoles: Array<string>;
+  selectedOrgUserRolesNew: any;
 
   /**
 	 * Contains announcement details returned from API or object called from
@@ -30,26 +33,30 @@ export class UserEditComponent implements OnInit {
   userDetails: any;
 
   allRoles = [
-    {'role': 'COURSE_MENTOR', 'actions': [{}], 'roleName': 'Course Mentor'},
-    {'role': 'CONTENT_REVIEWER', 'actions': [{'urls': ['v1/course/create'], 'name': 'createCourse', 'id': 'createCourse'},
-    {'urls': [], 'name': 'updateCourse', 'id': 'updateCourse'},
-    {'urls': [], 'name': 'createContent', 'id': 'createContent'},
-    {'urls': [], 'name': 'updateContent', 'id': 'updateContent'},
-    {'urls': [], 'name': 'flagCourse', 'id': 'flagCourse'},
-    {'urls': [], 'name': 'flagContent', 'id': 'flagContent'},
-    {'urls': ['/v1/course/publish'], 'name': 'publishCourse', 'id': 'publishCourse'},
-    {'urls': ['/v1/course/publish'], 'name': 'publishContent', 'id': 'publishContent'}], 'roleName': 'Content Reviewer'},
-    {'role': 'TEACHER_BADGE_ISSUER', 'actions': [], 'roleName': 'Teacher Badge Issuer'},
-    {'role': 'BOOK_CREATOR', 'actions': [], 'roleName': 'Book Creator'},
-    {'role': 'BOOK_REVIEWER', 'actions': [], 'roleName': 'Book Reviewer'},
-    {'role': 'OFFICIAL_TEXTBOOK_BADGE_ISSUER', 'actions': [], 'roleName': 'Official TextBook Badge Issuer'},
-    {'role': 'PUBLIC', 'actions': [{}], 'roleName': 'Public'},
-    {'role': 'ANNOUNCEMENT_SENDER', 'actions': [{}], 'roleName': 'Announcement Sender'},
-    {'role': 'CONTENT_CREATOR', 'actions': [{'urls': ['v1/course/create'], 'name': 'createCourse', 'id': 'createCourse'},
-    {'urls': [], 'name': 'updateCourse', 'id': 'updateCourse'},
-    {'urls': [], 'name': 'createContent', 'id': 'createContent'},
-    {'urls': [], 'name': 'updateContent', 'id': 'updateContent'}], 'roleName': 'Content Creator'},
-    {'role': 'FLAG_REVIEWER', 'actions': [{}], 'roleName': 'Flag Reviewer'}];
+    { 'role': 'COURSE_MENTOR', 'actions': [{}], 'roleName': 'Course Mentor' },
+    {
+      'role': 'CONTENT_REVIEWER', 'actions': [{ 'urls': ['v1/course/create'], 'name': 'createCourse', 'id': 'createCourse' },
+      { 'urls': [], 'name': 'updateCourse', 'id': 'updateCourse' },
+      { 'urls': [], 'name': 'createContent', 'id': 'createContent' },
+      { 'urls': [], 'name': 'updateContent', 'id': 'updateContent' },
+      { 'urls': [], 'name': 'flagCourse', 'id': 'flagCourse' },
+      { 'urls': [], 'name': 'flagContent', 'id': 'flagContent' },
+      { 'urls': ['/v1/course/publish'], 'name': 'publishCourse', 'id': 'publishCourse' },
+      { 'urls': ['/v1/course/publish'], 'name': 'publishContent', 'id': 'publishContent' }], 'roleName': 'Content Reviewer'
+    },
+    { 'role': 'TEACHER_BADGE_ISSUER', 'actions': [], 'roleName': 'Teacher Badge Issuer' },
+    { 'role': 'BOOK_CREATOR', 'actions': [], 'roleName': 'Book Creator' },
+    { 'role': 'BOOK_REVIEWER', 'actions': [], 'roleName': 'Book Reviewer' },
+    { 'role': 'OFFICIAL_TEXTBOOK_BADGE_ISSUER', 'actions': [], 'roleName': 'Official TextBook Badge Issuer' },
+    { 'role': 'PUBLIC', 'actions': [{}], 'roleName': 'Public' },
+    { 'role': 'ANNOUNCEMENT_SENDER', 'actions': [{}], 'roleName': 'Announcement Sender' },
+    {
+      'role': 'CONTENT_CREATOR', 'actions': [{ 'urls': ['v1/course/create'], 'name': 'createCourse', 'id': 'createCourse' },
+      { 'urls': [], 'name': 'updateCourse', 'id': 'updateCourse' },
+      { 'urls': [], 'name': 'createContent', 'id': 'createContent' },
+      { 'urls': [], 'name': 'updateContent', 'id': 'updateContent' }], 'roleName': 'Content Creator'
+    },
+    { 'role': 'FLAG_REVIEWER', 'actions': [{}], 'roleName': 'Flag Reviewer' }];
 
 
   /**
@@ -102,24 +109,6 @@ export class UserEditComponent implements OnInit {
     this.routerNavigationService = routerNavigationService;
   }
 
-  /**
-   * This method calls the delete API with a particular announcement
-   * id and and changes the status to cancelled of that particular
-   * announcement.
-	 */
-  deleteUser(): void {
-    const option = { userId: this.userId };
-    this.userSearchService.deleteUser(option).subscribe(
-      (apiResponse: ServerResponse) => {
-        this.toasterService.success(this.resourceService.messages.smsg.m0029);
-        this.redirect();
-      },
-      err => {
-        this.toasterService.error(this.resourceService.messages.emsg.m0005);
-        this.redirect();
-      }
-    );
-  }
 
   /**
    * This method helps to redirect to the parent component
@@ -162,6 +151,11 @@ export class UserEditComponent implements OnInit {
         (apiResponse: ServerResponse) => {
           this.userDetails = apiResponse.result.response;
           this.populateOrgName();
+          this.selectedOrgId = this.userDetails.organisations[0].id;
+      this.selectedOrgUserRoles = this.userDetails.organisations[0].roles;
+
+
+          console.log('this.selectedOrgUserRoles', this.selectedOrgUserRoles);
         },
         err => {
           this.toasterService.error(this.resourceService.messages.emsg.m0005);
@@ -170,7 +164,59 @@ export class UserEditComponent implements OnInit {
       );
     } else {
       this.userDetails = this.userSearchService.userDetailsObject;
+      this.selectedOrgId = this.userDetails.organisations[0].id;
+      this.selectedOrgUserRoles = this.userDetails.organisations[0].roles;
     }
+
+
+  }
+
+  editRoles(role, userRoles, event) {
+    this.selectedOrgUserRolesNew = [];
+    if (userRoles.includes(role) === true) {
+      this.selectedOrgUserRoles = this.selectedOrgUserRoles.filter(function (selectedRole) {
+        return selectedRole !== role;
+      });
+    } else {
+      if (event.target.checked === true) {
+        this.selectedOrgUserRolesNew.push(role);
+      } else {
+        this.selectedOrgUserRolesNew.splice(this.selectedOrgUserRolesNew.indexOf(role));
+      }
+    }
+  }
+
+
+
+  updateRoles(roles) {
+    this.selectedOrgUserRolesNew.forEach(function (Newroles) {
+      roles.push(Newroles);
+    });
+    const mainRole = [];
+    const mainRolesCollections = _.clone(this.allRoles);
+    _.forEach(mainRolesCollections, function (value, key) {
+      mainRole.push(value.role);
+    });
+    const sendingRoles = _.clone(roles);
+    const removalRoles = _.difference(sendingRoles, mainRole);
+    _.remove(roles, function (role) {
+      return _.indexOf(removalRoles, role) !== -1;
+    });
+
+
+          const option = { userId: this.userId, selectedOrgId: this.selectedOrgId, roles: roles  };
+      this.userSearchService.updateRoles(option).subscribe(
+        (apiResponse: ServerResponse) => {
+          this.toasterService.success(this.resourceService.messages.emsg.m0028);
+            this.redirect();
+        },
+        err => {
+          this.selectedOrgUserRoles = _.difference(this.selectedOrgUserRoles, this.selectedOrgUserRolesNew);
+          this.toasterService.error(this.resourceService.messages.emsg.m0051);
+          this.redirect();
+        }
+      );
+
   }
 
   /**

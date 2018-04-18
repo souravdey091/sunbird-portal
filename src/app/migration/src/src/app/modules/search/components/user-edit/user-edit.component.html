@@ -27,10 +27,10 @@
         <div class="ui selection dropdown margin-left-10" suiDropdown *ngIf="userDetails && userDetails.organisations.length > 0">
             <i class="dropdown icon"></i>
             <!--<div class="default text">{{resourceService.frmelmnts?.lbl?.org}}</div>-->
-            <div class="dashBoardSectionHeading text">{{selectedOrgName ||  userDetails.organisations[0].orgName}}</div>
+            <div >{{selectedOrgName ||  userDetails.organisations[0].orgName}}</div>
 
             <div class="menu" suiDropdownMenu  [menuAutoSelectFirst]="true">
-                <div class="item" *ngFor="let org of userDetails.organisations" (click)="selectedOrgName = org.orgName;">{{org.orgName}}</div>
+                <div class="item" *ngFor="let org of userDetails.organisations" (click)="selectedOrgName = org.orgName; selectedOrgUserRoles=org.roles; selectedOrgId=org.id">{{org.orgName}}</div>
             </div>
         </div>
 
@@ -47,12 +47,14 @@
 
 
 
-        <div class="ui form margin-top-40">
+
+
+        <div class="ui form margin-top-40" *ngIf="selectedOrgUserRoles">
             <ul class="selectOrgRoles">
 
                 <li class="orgRolesListView" *ngFor="let role of allRoles">
                     <div class="ui checkbox">
-                        <input type="checkbox" value='{{role.role}}'>
+                        <input type="checkbox" value='{{role.role}}' (click)="editRoles(role.role, selectedOrgUserRoles, $event)" [checked]="selectedOrgUserRoles.includes(role.role)" [disabled]="selectedOrgUserRoles.includes(role.role)">
                         <label>{{role.roleName || role.role}}</label>
                     </div>
                 </li>
@@ -61,8 +63,8 @@
         </div>
     </div>
     <div class="actions">
-        <!--<button ng-disable="!admin.selectedOrgUserRoles" class="ui primary button" type="submit" (click)="admin.updateRoles(admin.identifier,admin.selectedOrgUserId,admin.selectedOrgUserRoles);">
-            {{resourceService.frmelmnts?.btn?.update}}</button>-->
+        <button [disabled]="!selectedOrgUserRoles" class="ui primary button" type="submit" (click)="updateRoles(selectedOrgUserRoles);">
+            {{resourceService.frmelmnts?.btn?.update}}</button>
     </div>
 
 
