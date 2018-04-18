@@ -18,7 +18,7 @@
         </h5>
       </div>
 
-      <div class=" ui clearing segment" *ngIf="!showLoader && !noResult">
+      <div *ngIf="!showLoader && !noResult && config.appConfig.SEARCH.ORGANISATION.DOWNLOAD_BUTTON === 'TRUE'">
         <div class="ui right floated primary button" (click)="downloadOrganisation();">
           {{resourceService.frmelmnts?.btn?.download}}
         </div>

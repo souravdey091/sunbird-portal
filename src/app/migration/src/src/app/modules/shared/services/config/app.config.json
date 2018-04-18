@@ -16,7 +16,13 @@
         "lastUpdatedOn": "desc"
     },
     "SEARCH": {
-        "PAGE_LIMIT": 20
+        "PAGE_LIMIT": 20,
+        "USER": {
+            "DOWNLOAD_BUTTON": "FALSE"
+        },
+        "ORGANISATION": {
+            "DOWNLOAD_BUTTON": "TRUE"
+        }
     },
     "ANNOUNCEMENT": {
         "HOME": {

@@ -46,7 +46,7 @@
                   </sui-multi-select>
                 </div>
                 <div class="two wide column">
-                  <sui-multi-select class="selection ui filtersearch" [(ngModel)]="queryParams.Roles" labelField="roles.key" valueField="roles.value"
+                  <sui-multi-select class="selection ui filtersearch" [(ngModel)]="queryParams.Roles" labelField="roles.name" valueField="roles.id"
                     [options]="options" [hasLabels]=false #multiSelect>
                     <sui-select-option *ngFor="let roles of searchRoles" [value]="roles"> </sui-select-option>
                   </sui-multi-select>
