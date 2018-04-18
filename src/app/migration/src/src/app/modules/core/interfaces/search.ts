@@ -57,6 +57,6 @@ export interface SearchParam {
     * filters param
     */
    filters?: any;
-   sort_by?: any;
+   sort_by?: { [key: string]: string};
 
   }

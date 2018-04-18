@@ -422,14 +422,14 @@
             },
             "All": {
                 "DROPDOWN": {
-                    "boards": [],
-                    "subjects": [],
-                    "languages": []
+                    "Curriculum": [],
+                    "Subjects": [],
+                    "Medium": []
                 },
                 "label": [
-                    "boards",
-                    "languages",
-                    "subjects",
+                    "Curriculum",
+                    "Medium",
+                    "Subjects",
                     "Concepts"
                 ]
             },

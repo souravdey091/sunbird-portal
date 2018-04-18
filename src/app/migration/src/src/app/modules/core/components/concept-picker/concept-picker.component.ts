@@ -1,18 +1,15 @@
-import { SearchService } from './../../services/search/search.service';
+import { ConceptPickerService } from './../../services/concept-picker/concept-picker.service';
 import { ServerResponse, ResourceService, ToasterService } from '@sunbird/shared';
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
-declare  var $: any;
+declare var $: any;
 @Component({
   selector: 'app-concept-picker',
   templateUrl: './concept-picker.component.html',
   styleUrls: ['./concept-picker.component.css']
 })
 export class ConceptPickerComponent implements OnInit {
-  /**
-   * concepts list
-   */
-  concepts = [];
+  private conceptPickerService: ConceptPickerService;
   /**
    * concept Data
    */
@@ -36,111 +33,43 @@ export class ConceptPickerComponent implements OnInit {
    * any data
    */
   showLoader = true;
-
+  /**
+   * emits selected concepts
+   */
   @Output('Concepts')
   Concepts = new EventEmitter<any>();
-
-  constructor(public searchService: SearchService) { }
-/**
- * checks concept is present or not
- * if present calls loadDomains
- * else calls getConcept
- */
-  loadConceptTree() {
-    if (this.concepts && this.concepts.length > 0) {
-      this.loadDomains(false, this.concepts);
-    } else {
-     this.getConcept(0, 200, this.loadDomains);
-    }
+  /**
+    * Constructor to create injected service(s) object
+    * Default method of Draft Component class
+    * @param {ConceptPickerService} conceptPickerService Reference of ConceptPickerService
+  */
+  constructor( conceptPickerService: ConceptPickerService) {
+    this.conceptPickerService = conceptPickerService;
   }
- /**
- * call search api with objectType =['Dimension', 'Domain']
- */
-  loadDomains = (err, conceptArr) => {
-    const domains = [];
-    const searchParams = {
-      filters: {
-        objectType: ['Dimension', 'Domain']
-      }
-    };
-    this.searchService.compositeSearch(searchParams).subscribe(
-      (apiResponse: ServerResponse) => {
-        if (apiResponse.result && _.isArray(apiResponse.result.domains)) {
-            console.log('response', apiResponse);
-            _.forEach(apiResponse.result.domains, (value) => {
-              const domain = {};
-              domain['id'] = value['identifier'];
-              domain['name'] = value['name'];
-              const domainChild = [];
-              _.forEach(this.getChild(value['identifier']
-                , apiResponse.result.dimensions),
-              (val) => {
-                const dimension = {};
-                dimension['id'] = val['id'];
-                dimension['name'] = val['name'];
-                dimension['nodes'] = this.getChild(val.id, this.concepts);
-                domainChild.push(dimension);
-              });
-              domain['nodes'] = domainChild;
-              domains.push(domain);
-            });
-            this.conceptData = domains;
-            this.showLoader = false;
-           this.initConceptBrowser();
-        }
-      }
-    );
-  }
-/**
- * call search api with objectType =['Concept']
- */
-  getConcept(offset, limit, callback) {
-    const searchParams = {
-      filters: {
-        objectType: ['Concept']
-      },
-      offset: offset,
-        limit: limit
-    };
-    this.searchService.compositeSearch(searchParams).subscribe(
-      (apiResponse: ServerResponse) => {
-        if (apiResponse.result && _.isArray(apiResponse.result.concepts)) {
-            _.forEach(apiResponse.result.concepts, (value) => {
-              this.concepts.push(value);
-            });
-            if ((apiResponse.result.count > offset) && apiResponse.result.count > (offset + limit)) {
-              offset += limit;
-              limit = apiResponse.result.count - limit;
-              this.getConcept(offset, limit, callback);
-            }  else {
-              callback(null, this.concepts);
-            }
-        }
-      }
-    );
-  }
-/**
- * call tree picker
- */
+  /**
+   * call tree picker
+   */
   initConceptBrowser() {
     this.selectedConcepts = this.selectedConcepts || [];
-    this.contentConcepts = _.map(this.selectedConcepts, 'identifier');
-   this.pickerMessage = this.contentConcepts.length + ' concepts selected';
-   $('.tree-picker-selector').val(this.pickerMessage);
+    console.log(this.selectedConcepts);
+    this.contentConcepts = this.selectedConcepts;
+    this.pickerMessage = this.contentConcepts.length + ' concepts selected';
+    $('.tree-picker-selector').val(this.pickerMessage);
     setTimeout(() => {
       $('.tree-picker-selector').treePicker({
         data: this.conceptData,
         name: 'Concepts',
         picked: this.contentConcepts,
-        onSubmit:  (nodes) => {
+        onSubmit: (nodes) => {
           $('.tree-picker-selector').val(nodes.length + ' concepts selected');
-         this.contentConcepts = [];
+          this.contentConcepts = [];
           _.forEach(nodes, (obj) => {
             this.contentConcepts.push({
               identifier: obj.id,
               name: obj.name
             });
           });
+          console.log(this.contentConcepts);
           this.selectedConcepts = this.contentConcepts;
           console.log('selected', this.selectedConcepts);
           this.Concepts.emit(this.selectedConcepts);
@@ -150,34 +79,18 @@ export class ConceptPickerComponent implements OnInit {
       });
     }, 500);
   }
-   /**
-    *  Get child recursively
-    */
-   getChild(id, resp) {
-    const childArray = [];
-    _.forEach(resp, (value) => {
-      if (value.parent !== undefined) {
-        if (value.parent[0] === id) {
-          const child = {};
-          child['id'] = value['identifier'];
-          child['name'] = value['name'];
-          child['selectable'] = 'selectable';
-          child['nodes'] = this.getChild(value.identifier, resp);
-          childArray.push(child);
-        }
+  /**
+   * calls conceptPickerService and initConceptBrowser
+   */
+  ngOnInit() {
+    this.conceptPickerService.conceptData$.subscribe(apiData => {
+      if (apiData && !apiData.err) {
+        this.showLoader = false;
+        this.conceptData = apiData.data;
+        this.initConceptBrowser();
+      } else if (apiData && apiData.err) {
+        this.showLoader = false;
       }
     });
-    return _.uniqBy(childArray, 'id');
   }
-/**
- * calls loadConceptTree or initConceptBrowser
- */
-  ngOnInit() {
-    console.log(this.selectedConcepts);
-    if (!this.conceptData) {
-      this.loadConceptTree();
-    } else {
-      this.initConceptBrowser();
-    }
-}
 }
