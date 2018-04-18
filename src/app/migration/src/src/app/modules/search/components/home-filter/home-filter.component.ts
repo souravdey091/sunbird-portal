@@ -52,7 +52,7 @@ export class HomeFilterComponent implements OnInit {
     });
     this.queryParams['Concepts'] = events;
   }
-  isNumber(val) { return typeof val === 'object'; }
+ isNumber(val) { return typeof val === 'object'; }
   removeFilterSelection(filterType, value) {
     const itemIndex = this.queryParams[filterType].indexOf(value);
     if (itemIndex !== -1) {

@@ -7,8 +7,8 @@ import { SuiModule } from 'ng2-semantic-ui';
 import { SharedModule } from '@sunbird/shared';
 import { FormsModule } from '@angular/forms';
 import {
-  UserService, LearnerService, PermissionService, AnnouncementService,
-  BadgesService, ContentService, CoursesService, PageApiService, ConceptPickerService
+  UserService, LearnerService, PermissionService, AnnouncementService,  ConceptPickerService,
+  BadgesService, ContentService, CoursesService, PageApiService, TelemetryService, TelemetryLibUtilService
 } from './services';
 import {
   MainHeaderComponent, MainMenuComponent, SearchComponent, ConceptPickerComponent
@@ -28,7 +28,8 @@ import * as $ from 'jquery';
   exports: [MainHeaderComponent, PermissionDirective, ConceptPickerComponent],
   providers: [
     LearnerService, UserService,
-    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService, AuthGuard, ConceptPickerService]
+    PermissionService, AnnouncementService, BadgesService, ContentService, CoursesService, PageApiService,
+    AuthGuard, TelemetryService, TelemetryLibUtilService, ConceptPickerService]
 })
 export class CoreModule {
 }

@@ -2,13 +2,14 @@ import { ConceptPickerService } from './../../services/concept-picker/concept-pi
 import { ServerResponse, ResourceService, ToasterService } from '@sunbird/shared';
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
-declare  var $: any;
+declare var $: any;
 @Component({
   selector: 'app-concept-picker',
   templateUrl: './concept-picker.component.html',
   styleUrls: ['./concept-picker.component.css']
 })
 export class ConceptPickerComponent implements OnInit {
+  private conceptPickerService: ConceptPickerService;
   /**
    * concept Data
    */
@@ -32,29 +33,36 @@ export class ConceptPickerComponent implements OnInit {
    * any data
    */
   showLoader = true;
-
+  /**
+   * emits selected concepts
+   */
   @Output('Concepts')
   Concepts = new EventEmitter<any>();
-
-  constructor(public conceptPickerService: ConceptPickerService) {
-   }
-/**
- * call tree picker
- */
+  /**
+    * Constructor to create injected service(s) object
+    * Default method of Draft Component class
+    * @param {ConceptPickerService} conceptPickerService Reference of ConceptPickerService
+  */
+  constructor( conceptPickerService: ConceptPickerService) {
+    this.conceptPickerService = conceptPickerService;
+  }
+  /**
+   * call tree picker
+   */
   initConceptBrowser() {
     this.selectedConcepts = this.selectedConcepts || [];
     console.log(this.selectedConcepts);
     this.contentConcepts = this.selectedConcepts;
-   this.pickerMessage = this.contentConcepts.length + ' concepts selected';
-   $('.tree-picker-selector').val(this.pickerMessage);
+    this.pickerMessage = this.contentConcepts.length + ' concepts selected';
+    $('.tree-picker-selector').val(this.pickerMessage);
     setTimeout(() => {
       $('.tree-picker-selector').treePicker({
         data: this.conceptData,
         name: 'Concepts',
         picked: this.contentConcepts,
-        onSubmit:  (nodes) => {
+        onSubmit: (nodes) => {
           $('.tree-picker-selector').val(nodes.length + ' concepts selected');
-         this.contentConcepts = [];
+          this.contentConcepts = [];
           _.forEach(nodes, (obj) => {
             this.contentConcepts.push({
               identifier: obj.id,
@@ -71,20 +79,18 @@ export class ConceptPickerComponent implements OnInit {
       });
     }, 500);
   }
-/**
- * calls loadConceptTree or initConceptBrowser
- */
+  /**
+   * calls conceptPickerService and initConceptBrowser
+   */
   ngOnInit() {
     this.conceptPickerService.conceptData$.subscribe(apiData => {
       if (apiData && !apiData.err) {
         this.showLoader = false;
         this.conceptData = apiData.data;
         this.initConceptBrowser();
-        console.log('kkkkkkk', this.conceptData);
       } else if (apiData && apiData.err) {
         this.showLoader = false;
-       // this.toasterService.error(this.resourceService.messages.fmsg.m0001);
       }
     });
-}
+  }
 }

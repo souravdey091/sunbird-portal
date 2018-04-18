@@ -9,6 +9,7 @@
       "outDir": "../dist",
       "assets": [
         "assets",
+        "thirdparty",
         "favicon.png"
       ],
       "index": "index.html",
@@ -31,7 +32,9 @@
         "../node_modules/slick-carousel/slick/slick.js",
         "../node_modules/fine-uploader/fine-uploader/fine-uploader.min.js",
         "./assets/libs/semantic.min.js",
-        "./assets/libs/semantic-ui-tree-picker/semantic-ui-tree-picker.js"
+        "./assets/libs/semantic-ui-tree-picker/semantic-ui-tree-picker.js",
+        "assets/common/js/telemetry.min.js",
+        "../node_modules/fine-uploader/fine-uploader/fine-uploader.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

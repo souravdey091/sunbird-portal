@@ -24,7 +24,6 @@
                               <i class="delete icon" (click)="removeFilterSelection(value,item)"></i>
                             </a>
                           </span>
-                          
                         </span>
                       </span>
                     </div>
@@ -49,7 +48,6 @@
                           <sui-select-option *ngFor="let subject of searchSubjects" [value]="subject"> </sui-select-option>
                         </sui-multi-select>
                       </div>
-                      <!-- concept -->
                       <div class="two wide column">
                             <div class="field">
                               <form class="conceptSelector ui form">
@@ -57,7 +55,6 @@
                               </form>
                             </div>
                           </div>
-                      <!-- buttons -->
                       <div class="three wide column filter-button">
                         <a class="searchfilterbutton ui blue tiny  button" (click)="applyFilters()">{{resourceService.frmelmnts?.btn?.apply}}</a>
                         <a class="searchfilterbutton ui primary tiny basic button" (click)="resetFilters()">{{resourceService.frmelmnts?.btn?.reset}}</a>
