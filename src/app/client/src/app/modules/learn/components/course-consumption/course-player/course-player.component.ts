@@ -114,7 +114,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
   public unsubscribe = new Subject<void>();
   public contentProgressEvents$ = new Subject();
   playerOption: any;
-  public showJoinTrainingModal = false;
+  pageId: string;
   constructor(public activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, public windowScrollService: WindowScrollService,
     public router: Router, public navigationHelperService: NavigationHelperService, private userService: UserService,
@@ -131,6 +131,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
     };
   }
   ngOnInit() {
+    this.pageId = this.activatedRoute.snapshot.data.telemetry.pageid;
     merge(this.activatedRoute.params.pipe(first(),
     mergeMap(({ courseId, batchId, courseStatus }) => {
       this.courseId = courseId;
@@ -390,7 +391,7 @@ export class CoursePlayerComponent implements OnInit, OnDestroy {
     }
 
     this.courseConsumptionService.updateContentsState(request).pipe(first())
-      .subscribe(updatedRes => this.contentStatus = updatedRes.content,
+      .subscribe(updatedRes => this.contentStatus = _.cloneDeep(updatedRes.content),
         err => console.log('updating content status failed', err));
   }
 
