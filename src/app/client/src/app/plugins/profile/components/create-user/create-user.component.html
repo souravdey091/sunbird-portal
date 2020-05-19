@@ -10,27 +10,36 @@
     </div>
     <div class="d-flex flex-jc-space-between">
       <div class="sb-field my-8 w-50">
-        <label class="font-weight-normal">Board:</label>
-        <!-- <sui-select class="selection" name="state" labelField="name" placeholder="Select State">
-          <sui-select-option *ngFor="let state of states" [value]="state"></sui-select-option>
-        </sui-select> -->
+        <label class="font-weight-normal">{{resourceService?.frmelmnts?.lbl?.profile?.Board}}:</label>
+        <sui-select class="selection" labelField="name" [isSearchable]="true" formControlName="board"
+          (ngModelChange)="onBoardChange($event)"
+          placeholder="{{resourceService?.frmelmnts?.lbl?.profile?.selectBoard}}" [options]="boardOption"
+          [isDisabled]="!boardOption.length" #boards>
+          <sui-select-option *ngFor="let board of boards.filteredOptions" [value]="board">
+          </sui-select-option>
+        </sui-select>
       </div>
 
       <div class="sb-field my-8 ml-16 w-50">
-        <label class="font-weight-normal">Medium:</label>
+        <label class="font-weight-normal">{{resourceService?.frmelmnts?.lbl?.profile?.Medium}}:</label>
         <div class="sb-field">
-          <!-- <sui-multi-select class="selection" name="district" labelField="name" placeholder="Select district">
-            <sui-select-option *ngFor="let district of districts" [value]="district"></sui-select-option>
-          </sui-multi-select> -->
+          <sui-select class="selection" labelField="name" [isSearchable]="true" formControlName="medium"
+            (ngModelChange)="onMediumChange($event)"
+            placeholder="{{resourceService?.frmelmnts?.lbl?.profile?.selectMedium}}" [options]="mediumOption" #mediums>
+            <sui-select-option *ngFor="let medium of mediums.filteredOptions" [value]="medium">
+            </sui-select-option>
+          </sui-select>
         </div>
       </div>
     </div>
     <div class="sb-field mb-16">
-      <label class="font-weight-normal">Class:</label>
+      <label class="font-weight-normal">{{resourceService?.frmelmnts?.lbl?.profile?.Classes}} :</label>
       <div class="sb-field">
-        <!-- <sui-multi-select class="selection" name="district" labelField="name" placeholder="Select district">
-          <sui-select-option *ngFor="let district of districts" [value]="district"></sui-select-option>
-        </sui-multi-select> -->
+        <sui-select class="selection" labelField="name" [isSearchable]="true" formControlName="class"
+          placeholder="{{resourceService?.frmelmnts?.lbl?.profile?.selectClass}}" [options]="classOption" #classes>
+          <sui-select-option *ngFor="let class of classes.filteredOptions" [value]="class">
+          </sui-select-option>
+        </sui-select>
       </div>
     </div>
 
@@ -42,8 +51,7 @@
           <sui-select-option *ngFor="let state of stateDiv.filteredOptions | slice:0:100" [value]="state">
           </sui-select-option>
         </sui-select>
-
-        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.state}}</label>
+        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.state}}<span>*</span></label>
       </div>
       <div class="sb-field field-focus onboard-content w-50 ml-16">
         <div class="ui segment" *ngIf="showDistrictDivLoader">
@@ -57,19 +65,19 @@
           <sui-select-option *ngFor="let district of districtDiv.filteredOptions | slice:0:100" [value]="district">
           </sui-select-option>
         </sui-select>
-        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.district}}</label>
+        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.district}}<span>*</span></label>
       </div>
     </div>
+    ​
+    <div class="required sb-checkbox sb-checkbox-primary sb-field">
+      <input formControlName="checkbox" type="checkbox" name="checkbox" required>
+      <label class="fsmall mx-8 font-weight-normal">I understand and accept the
+        <a class="text-underline fsmall" href="javascript:void(0)">DIKSHA Terms of Use.
+        </a>
+      </label></div>
   </form>
-  ​
-  <div class="required sb-checkbox sb-checkbox-primary sb-field">
-    <input type="checkbox" role="checkbox" name="checkbox">
-    <label class="fsmall mx-8 font-weight-normal">I understand and accept the
-      <a class="text-underline fsmall" href="javascript:void(0)">DIKSHA Terms of Use.
-      </a>
-    </label></div>
 
-    {{enableSubmitBtn}}
+  {{enableSubmitBtn}}
   ​
   <div class="user-profile-box__actions">
     <button [disabled]="!enableSubmitBtn" (click)="onSubmitForm()" type="submit"
