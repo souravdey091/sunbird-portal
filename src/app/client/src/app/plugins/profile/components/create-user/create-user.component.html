@@ -1,3 +1,79 @@
-<p>
-  create-user works!
-</p>
+<div class="user-profile-box">
+  <div class="d-flex flex-jc-space-between my-16">
+    <div class="user-profile-box__title">Create User</div>
+  </div>
+
+  <form class="sb-form my-16" [formGroup]="userDetailsForm">
+    <div class="sb-field">
+      <label class="font-weight-normal">Name<span>*</span></label>
+      <input class="sb-form-control" formControlName="name" type="text" name="name" placeholder="Enter user name">
+    </div>
+    <div class="d-flex flex-jc-space-between">
+      <div class="sb-field my-8 w-50">
+        <label class="font-weight-normal">Board:</label>
+        <!-- <sui-select class="selection" name="state" labelField="name" placeholder="Select State">
+          <sui-select-option *ngFor="let state of states" [value]="state"></sui-select-option>
+        </sui-select> -->
+      </div>
+
+      <div class="sb-field my-8 ml-16 w-50">
+        <label class="font-weight-normal">Medium:</label>
+        <div class="sb-field">
+          <!-- <sui-multi-select class="selection" name="district" labelField="name" placeholder="Select district">
+            <sui-select-option *ngFor="let district of districts" [value]="district"></sui-select-option>
+          </sui-multi-select> -->
+        </div>
+      </div>
+    </div>
+    <div class="sb-field mb-16">
+      <label class="font-weight-normal">Class:</label>
+      <div class="sb-field">
+        <!-- <sui-multi-select class="selection" name="district" labelField="name" placeholder="Select district">
+          <sui-select-option *ngFor="let district of districts" [value]="district"></sui-select-option>
+        </sui-multi-select> -->
+      </div>
+    </div>
+
+    <div class="fields-selection d-flex flex-jc-space-between w-100">
+      <div class="sb-field field-focus w-50" *ngIf="allStates">
+        <sui-select [isSearchable]="false" class="selection" formControlName="state" [options]="allStates"
+          labelField="name" valueField="code" name="state"
+          placeholder="{{resourceService?.frmelmnts?.lbl?.selectState}}" #stateDiv>
+          <sui-select-option *ngFor="let state of stateDiv.filteredOptions | slice:0:100" [value]="state">
+          </sui-select-option>
+        </sui-select>
+
+        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.state}}</label>
+      </div>
+      <div class="sb-field field-focus onboard-content w-50 ml-16">
+        <div class="ui segment" *ngIf="showDistrictDivLoader">
+          <div class="ui active inverted dimmer">
+            <div class="ui mini text loader">{{resourceService?.messages?.stmsg?.m0130}}</div>
+          </div>
+        </div>
+        <sui-select *ngIf="!showDistrictDivLoader" [isSearchable]="false" class="selection" formControlName="district"
+          [options]="allDistricts" labelField="name" valueField="code" name="district"
+          placeholder="{{resourceService?.frmelmnts?.lbl?.selectDistrict}}" #districtDiv>
+          <sui-select-option *ngFor="let district of districtDiv.filteredOptions | slice:0:100" [value]="district">
+          </sui-select-option>
+        </sui-select>
+        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.district}}</label>
+      </div>
+    </div>
+  </form>
+  ​
+  <div class="required sb-checkbox sb-checkbox-primary sb-field">
+    <input type="checkbox" role="checkbox" name="checkbox">
+    <label class="fsmall mx-8 font-weight-normal">I understand and accept the
+      <a class="text-underline fsmall" href="javascript:void(0)">DIKSHA Terms of Use.
+      </a>
+    </label></div>
+
+    {{enableSubmitBtn}}
+  ​
+  <div class="user-profile-box__actions">
+    <button [disabled]="!enableSubmitBtn" (click)="onSubmitForm()" type="submit"
+      class="sb-btn sb-btn-normal sb-btn-primary"> Add User
+    </button>
+  </div>
+</div>
