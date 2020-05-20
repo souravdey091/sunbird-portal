@@ -71,17 +71,24 @@
     ​
     <div class="required sb-checkbox sb-checkbox-primary sb-field">
       <input formControlName="checkbox" type="checkbox" name="checkbox" required>
-      <label class="fsmall mx-8 font-weight-normal">I understand and accept the
-        <a class="text-underline fsmall" href="javascript:void(0)">DIKSHA Terms of Use.
+      <label class="fsmall mx-8 font-weight-normal">{{resourceService?.frmelmnts?.lbl?.tncLabel}}
+        <a class="text-underline fsmall" href="javascript:void(0)" (click)="showAndHidePopup(true)">
+          {{resourceService?.frmelmnts?.lbl?.tncLabelLink | interpolate:'{instance}': instance}}
         </a>
-      </label></div>
+      </label>
+    </div>
   </form>
 
   {{enableSubmitBtn}}
   ​
   <div class="user-profile-box__actions">
     <button [disabled]="!enableSubmitBtn" (click)="onSubmitForm()" type="submit"
-      class="sb-btn sb-btn-normal sb-btn-primary"> Add User
+            [ngClass]="{'sb-btn-disabled': !enableSubmitBtn}"
+            class="sb-btn sb-btn-normal sb-btn-primary"> Add User
     </button>
   </div>
+
+  <app-tnc-popup (close)="showAndHidePopup(false)" [tncUrl]="termsAndConditionLink" #termsAndCondPopUp *ngIf="showTncPopup">
+  </app-tnc-popup>
+
 </div>

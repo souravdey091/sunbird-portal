@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
-import { ResourceService, ToasterService, IUserData } from '@sunbird/shared';
+import {ResourceService, ToasterService, IUserData, ServerResponse, UtilService} from '@sunbird/shared';
 import { ProfileService } from './../../services';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import * as _ from 'lodash-es';
@@ -40,15 +40,21 @@ export class CreateUserComponent implements OnInit, OnDestroy {
   mediumOption = [];
   classOption = [];
   frameworkCategories: any;
+  tncLatestVersion: any;
+  termsAndConditionLink: any;
+  showTncPopup = false;
+  instance: string;
 
   constructor(public resourceService: ResourceService, public toasterService: ToasterService,
     public profileService: ProfileService, formBuilder: FormBuilder,
     public userService: UserService, public orgDetailsService: OrgDetailsService, public channelService: ChannelService,
-    public frameworkService: FrameworkService) {
+    public frameworkService: FrameworkService, public utilService: UtilService) {
     this.sbFormBuilder = formBuilder;
   }
 
   ngOnInit() {
+    this.instance = _.upperCase(this.resourceService.instance || 'SUNBIRD');
+    this.fetchTncData();
     this.userSubscription = this.userService.userData$.subscribe((user: IUserData) => {
       if (user.userProfile) {
         this.userProfile = user.userProfile;
@@ -57,6 +63,28 @@ export class CreateUserComponent implements OnInit, OnDestroy {
         this.getState();
       }
     });
+  }
+
+  fetchTncData() {
+    this.profileService.getTncConfig().subscribe((data: ServerResponse) => {
+        const response = _.get(data, 'result.response.value');
+        if (response) {
+          try {
+            const tncConfig = this.utilService.parseJson(response);
+            this.tncLatestVersion = _.get(tncConfig, 'latestVersion') || {};
+            this.termsAndConditionLink = tncConfig[this.tncLatestVersion].url;
+          } catch (e) {
+            this.toasterService.error(_.get(this.resourceService, 'messages.fmsg.m0004'));
+          }
+        }
+      }, (err) => {
+        this.toasterService.error(_.get(this.resourceService, 'messages.fmsg.m0004'));
+      }
+    );
+  }
+
+  showAndHidePopup(mode: boolean) {
+    this.showTncPopup = mode;
   }
 
   initializeFormFields() {
@@ -244,6 +272,37 @@ export class CreateUserComponent implements OnInit, OnDestroy {
 
   onSubmitForm() {
     console.log('this.userDetailsForm', this.userDetailsForm);
+    const createUserRequest = {
+      request: {
+        firstName: this.userDetailsForm.value.name,
+        managedBy: this.userService.userid,
+/*        state: this.userDetailsForm.value.state,
+        district: this.userDetailsForm.value.district,
+        framework: {
+          board: [this.userDetailsForm.value.board || ''],
+          medium: [this.userDetailsForm.value.medium || ''],
+          gradeLevel: [this.userDetailsForm.value.class || '']
+          /!* id: "ekstep_ncert_k-12"*!/
+        }*/
+      }
+    };
+    this.userService.registerUser(createUserRequest).subscribe((resp: ServerResponse) => {
+        const requestBody = {
+          request: {
+            version: this.userProfile.tncLatestVersion,
+            userId: resp.result.userId
+          }
+        };
+        this.userService.acceptTermsAndConditions(requestBody).subscribe(res => {
+
+        }, err => {
+          this.toasterService.error(this.resourceService.messages.fmsg.m0085);
+        });
+      },
+      (err) => {
+        // this.disableSubmitBtn = false;
+      }
+    );
   }
 
   updateProfile(data) {

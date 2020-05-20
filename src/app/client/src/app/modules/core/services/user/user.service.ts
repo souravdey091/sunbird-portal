@@ -385,4 +385,12 @@ export class UserService {
   setUserFramework(framework) {
     this._userProfile.framework = framework;
   }
+
+  registerUser(data) {
+    const options = {
+      url: this.config.urlConFig.URLS.USER.SIGN_UP_V1,
+      data: data
+    };
+    return this.learnerService.post(options);
+  }
 }
