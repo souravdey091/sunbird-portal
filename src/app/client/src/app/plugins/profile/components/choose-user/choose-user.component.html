@@ -5,14 +5,19 @@
   </div>
   ​
   <div class="members-list">
-    <div class="members-list-item acitve">
-      <div class="oval">A</div>
-      <div class="member-name"><span>User Name 01</span></div>
-      <img src="./assets/images/tick-mark.svg" class="icon_active" />
-    </div>
-    <div class="members-list-item">
-      <div class="oval">B</div>
-      <div class="member-name"><span>User Name 02</span></div>
+    <div class="members-list-item" *ngFor="let userData of userList">
+      <div class="oval">
+        <ngx-avatar class="my-avatar" [style]="{
+         backgroundColor: '#ffffff',
+         border: '1px solid #fff',
+         borderRadius: '50%',
+         color: '#000000',
+         fontWeight: '700',
+         fontFamily: 'inherit'}" [size]="30" initialsSize="1" [textSizeRatio]="2" name="{{userData.firstName}} ">
+        </ngx-avatar>
+      </div>
+      <div class="member-name"><span>{{userData.firstName}} {{userData.lastName}}</span></div>
+      <img src="./assets/images/tick-mark.svg" class="icon_active"/>
     </div>
   </div>
   ​

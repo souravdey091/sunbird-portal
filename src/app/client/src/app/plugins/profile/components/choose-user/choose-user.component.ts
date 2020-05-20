@@ -19,39 +19,49 @@ export class ChooseUserComponent implements OnInit {
               private telemetryService: TelemetryService, private configService: ConfigService) {
   }
 
+  userList: [];
+  selectedUser: {};
+
   ngOnInit() {
     this.getManagedUserList();
+  }
+
+  updateSelectedUser(event) {
+    this.selectedUser = event;
   }
 
   getManagedUserList() {
     const fetchManagedUserRequest = {
       request: {
         filters: {
-          managedBy: 'de35f92e-08a9-462d-b9e0-4d909c37227c' || this.userService.userid
+          /* TODO: to be uncommneted
+          managedBy: 'de35f92e-08a9-462d-b9e0-4d909c37227c' || this.userService.userid*/
         },
         offset: 0,
         limit: 20
       }
     };
     this.profileService.fetchManagedUserList(fetchManagedUserRequest).subscribe((data: ServerResponse) => {
-        console.log(data);
-
+        /* TODO: to be deleted need not to splice the data
+        */
+        this.userList = data.result.response.content.slice(1, 3);
+        console.log(this.userList);
       }, (err) => {
-        // this.toasterService.error(_.get(this.resourceService, 'messages.fmsg.m0004'));
+// this.toasterService.error(_.get(this.resourceService, 'messages.fmsg.m0004'));
       }
     );
   }
 
   switchUser(userId) {
     this.profileService.initiateSwitchUser(userId).subscribe((data) => {
-      console.log(data);
-      // @ts-ignore
-      document.getElementById('userId').value = 'de35f92e-08a9-462d-b9e0-4d909c37227c';
-      this.userService.setUserId('de35f92e-08a9-462d-b9e0-4d909c37227c');
-      this.userService.initialize(true);
-      this.telemetryService.initialize(this.getTelemetryContext());
+        console.log(data);
+// @ts-ignore
+        document.getElementById('userId').value = 'de35f92e-08a9-462d-b9e0-4d909c37227c';
+        this.userService.setUserId('de35f92e-08a9-462d-b9e0-4d909c37227c');
+        this.userService.initialize(true);
+        this.telemetryService.initialize(this.getTelemetryContext());
       }, (err) => {
-        // this.toasterService.error(_.get(this.resourceService, 'messages.fmsg.m0004'));
+// this.toasterService.error(_.get(this.resourceService, 'messages.fmsg.m0004'));
       }
     );
   }
