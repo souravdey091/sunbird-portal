@@ -6,67 +6,7 @@
   <form class="sb-form my-16" [formGroup]="userDetailsForm">
     <div class="sb-field">
       <label class="font-weight-normal">Name<span>*</span></label>
-      <input class="sb-form-control" formControlName="name" type="text" name="name" placeholder="Enter user name">
-    </div>
-    <div class="d-flex flex-jc-space-between">
-      <div class="sb-field my-8 w-50">
-        <label class="font-weight-normal">{{resourceService?.frmelmnts?.lbl?.profile?.Board}}:</label>
-        <sui-select class="selection" labelField="name" [isSearchable]="true" formControlName="board"
-          (ngModelChange)="onBoardChange($event)"
-          placeholder="{{resourceService?.frmelmnts?.lbl?.profile?.selectBoard}}" [options]="boardOption"
-          [isDisabled]="!boardOption.length" #boards>
-          <sui-select-option *ngFor="let board of boards.filteredOptions" [value]="board">
-          </sui-select-option>
-        </sui-select>
-      </div>
-
-      <div class="sb-field my-8 ml-16 w-50">
-        <label class="font-weight-normal">{{resourceService?.frmelmnts?.lbl?.profile?.Medium}}:</label>
-        <div class="sb-field">
-          <sui-select class="selection" labelField="name" [isSearchable]="true" formControlName="medium"
-            (ngModelChange)="onMediumChange($event)"
-            placeholder="{{resourceService?.frmelmnts?.lbl?.profile?.selectMedium}}" [options]="mediumOption" #mediums>
-            <sui-select-option *ngFor="let medium of mediums.filteredOptions" [value]="medium">
-            </sui-select-option>
-          </sui-select>
-        </div>
-      </div>
-    </div>
-    <div class="sb-field mb-16">
-      <label class="font-weight-normal">{{resourceService?.frmelmnts?.lbl?.profile?.Classes}} :</label>
-      <div class="sb-field">
-        <sui-select class="selection" labelField="name" [isSearchable]="true" formControlName="class"
-          placeholder="{{resourceService?.frmelmnts?.lbl?.profile?.selectClass}}" [options]="classOption" #classes>
-          <sui-select-option *ngFor="let class of classes.filteredOptions" [value]="class">
-          </sui-select-option>
-        </sui-select>
-      </div>
-    </div>
-
-    <div class="fields-selection d-flex flex-jc-space-between w-100">
-      <div class="sb-field field-focus w-50" *ngIf="allStates">
-        <sui-select [isSearchable]="false" class="selection" formControlName="state" [options]="allStates"
-          labelField="name" valueField="code" name="state"
-          placeholder="{{resourceService?.frmelmnts?.lbl?.selectState}}" #stateDiv>
-          <sui-select-option *ngFor="let state of stateDiv.filteredOptions | slice:0:100" [value]="state">
-          </sui-select-option>
-        </sui-select>
-        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.state}}<span>*</span></label>
-      </div>
-      <div class="sb-field field-focus onboard-content w-50 ml-16">
-        <div class="ui segment" *ngIf="showDistrictDivLoader">
-          <div class="ui active inverted dimmer">
-            <div class="ui mini text loader">{{resourceService?.messages?.stmsg?.m0130}}</div>
-          </div>
-        </div>
-        <sui-select *ngIf="!showDistrictDivLoader" [isSearchable]="false" class="selection" formControlName="district"
-          [options]="allDistricts" labelField="name" valueField="code" name="district"
-          placeholder="{{resourceService?.frmelmnts?.lbl?.selectDistrict}}" #districtDiv>
-          <sui-select-option *ngFor="let district of districtDiv.filteredOptions | slice:0:100" [value]="district">
-          </sui-select-option>
-        </sui-select>
-        <label class="d-flex font-weight-normal">{{resourceService?.frmelmnts?.lbl?.district}}<span>*</span></label>
-      </div>
+      <input class="sb-form-control" formControlName="name" type="text" name="name" placeholder="Enter Name">
     </div>
     ​
     <div class="required sb-checkbox sb-checkbox-primary sb-field">
