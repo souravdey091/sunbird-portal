@@ -1,20 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ResourceService, ToasterService, ServerResponse, UtilService } from '@sunbird/shared';
 import { ProfileService } from './../../services';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import * as _ from 'lodash-es';
 import { IInteractEventObject, IInteractEventEdata } from '@sunbird/telemetry';
 import { OrgDetailsService, ChannelService, FrameworkService, UserService, FormService } from '@sunbird/core';
-import { Subscription, Subject } from 'rxjs';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.scss']
 })
-export class CreateUserComponent implements OnInit, OnDestroy {
+export class CreateUserComponent implements OnInit {
 
   userProfile: any;
   userDetailsForm: FormGroup;
@@ -136,8 +134,5 @@ export class CreateUserComponent implements OnInit, OnDestroy {
         this.toasterService.error(this.resourceService.messages.fmsg.m0085);
       }
     );
-  }
-
-  ngOnDestroy() {
   }
 }

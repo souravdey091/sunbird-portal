@@ -3,18 +3,20 @@ import { FrameworkService, UserService, ChannelService, OrgDetailsService } from
 import { map, mergeMap, filter, first } from 'rxjs/operators';
 import * as _ from 'lodash-es';
 import { of, throwError } from 'rxjs';
-
+import { CsModule } from '@project-sunbird/client-services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsService {
-
+  private groupCservice: any;
   constructor(private channelService: ChannelService, private orgDetailsService: OrgDetailsService, private userService: UserService,
-    private frameworkService: FrameworkService ) { }
+    private frameworkService: FrameworkService) {
+      this.groupCservice = CsModule.instance.groupService;
+    }
 
   public isCustodianOrgUser() {
-    return this.orgDetailsService.getCustodianOrg().pipe(map((custodianOrg) => {
+    return this.orgDetailsService.getCustodianOrgDetails().pipe(map((custodianOrg) => {
       if (_.get(this.userService, 'userProfile.rootOrg.rootOrgId') === _.get(custodianOrg, 'result.response.value')) {
         return true;
       }
@@ -73,6 +75,14 @@ export class GroupsService {
       return true;
     });
     return {'formFieldProperties': _.sortBy(_.uniqBy(formFieldProperties, 'code'), 'index'), 'frameWorkId': formData.frameWorkId};
+  }
+
+  async createGroup(data: any) {
+    return await this.groupCservice.create(data.groupName, data.board, data.medium, data.gradeLevel, data.subject).toPromise();
+  }
+
+  async getAllGroups() {
+    return await this.groupCservice.getAll().toPromise();
   }
 
 
