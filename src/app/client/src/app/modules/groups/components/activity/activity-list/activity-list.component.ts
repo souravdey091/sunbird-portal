@@ -60,7 +60,6 @@ export class ActivityListComponent implements OnInit, OnDestroy {
           this.addTelemetry('activity-kebab-menu-close');
         }
       });
-
     this.groupService.showMenu.subscribe(data => {
       this.showMenu = data === 'activity';
     });
@@ -68,21 +67,29 @@ export class ActivityListComponent implements OnInit, OnDestroy {
 
 
   openActivity(event: any, activityType) {
-    this.addTelemetry('activity-card', [{id: _.get(event, 'data.identifier'), type: _.get(event, 'data.resourceType')}]);
-    const options = { relativeTo: this.activateRoute, queryParams: { contentType: _.get(event, 'data.contentType'),
-    title: activityType} };
-    if (_.get(this.groupData, 'isAdmin')) {
-      this.router.navigate([`${ACTIVITY_DETAILS}`, _.get(event, 'data.identifier')], options);
-    } else {
-      this.playerService.playContent(_.get(event, 'data'));
-    }
+      if (!this.groupData.active) {
+        this.addTelemetry('activity-suspend-card', [], {},
+      {id: _.get(event, 'data.identifier'), type: _.get(event, 'data.primaryCategory'),
+      ver: _.get(event, 'data.pkgVersion') ? `${_.get(event, 'data.pkgVersion')}` : '1.0'});
+        return;
+      }
+      this.addTelemetry('activity-card', [{id: _.get(event, 'data.identifier'), type: _.get(event, 'data.resourceType')}]);
+      const options = { relativeTo: this.activateRoute, queryParams: { contentType: _.get(event, 'data.contentType'),
+      title: activityType} };
+      if (_.get(this.groupData, 'isAdmin')) {
+        this.router.navigate([`${ACTIVITY_DETAILS}`, _.get(event, 'data.identifier')], options);
+      } else {
+        this.playerService.playContent(_.get(event, 'data'));
+      }
+
   }
 
   getMenuData(event) {
-    this.showMenu = !this.showMenu;
-    this.groupService.emitMenuVisibility('activity');
-    this.selectedActivity = _.get(event, 'data');
-    this.addTelemetry('activity-kebab-menu-open');
+      this.showMenu = !this.showMenu;
+      this.groupService.emitMenuVisibility('activity');
+      this.selectedActivity = _.get(event, 'data');
+      this.addTelemetry('activity-kebab-menu-open', [], {}, {id: _.get(event, 'data.identifier'), type: _.get(event, 'data.primaryCategory'),
+      ver: _.get(event, 'data.pkgVersion') ? `${_.get(event, 'data.pkgVersion')}` : '1.0'});
   }
 
   toggleModal(show = false) {
@@ -111,8 +118,11 @@ export class ActivityListComponent implements OnInit, OnDestroy {
     // TODO: add telemetry here
   }
 
-  addTelemetry (id, cdata?, extra?) {
-    this.groupService.addTelemetry(id, this.activateRoute.snapshot, cdata, _.get(this.groupData.id), extra);
+  addTelemetry (id, cdata?, extra?, obj?) {
+      if (cdata) {
+        cdata.push({id: _.get(this.groupData, 'id'), type : 'group'});
+      }
+    this.groupService.addTelemetry({id, extra}, this.activateRoute.snapshot, cdata, obj);
   }
 
   toggleViewAll(visibility: boolean, type?) {
@@ -121,8 +131,8 @@ export class ActivityListComponent implements OnInit, OnDestroy {
   }
 
   isCourse(type) {
-    return (_.lowerCase(type) === _.lowerCase(this.configService.appConfig.contentType.Course) ||
-    (_.lowerCase(type) === _.lowerCase(this.configService.appConfig.contentType.Courses)));
+    return (_.lowerCase(this.resourceService.frmelmnts.lbl[type]) === _.lowerCase(this.configService.appConfig.contentType.Course) ||
+    (_.lowerCase(this.resourceService.frmelmnts.lbl[type]) === _.lowerCase(this.configService.appConfig.contentType.Courses)));
   }
 
   viewSelectedTypeContents(type, list, index) {

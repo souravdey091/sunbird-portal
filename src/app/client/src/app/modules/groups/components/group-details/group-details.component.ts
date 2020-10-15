@@ -108,12 +108,17 @@ export class GroupDetailsComponent implements OnInit, OnDestroy {
   }
 
 
-  addTelemetry (id) {
-    this.groupService.addTelemetry(id, this.activatedRoute.snapshot, []);
+  addTelemetry (id, extra?) {
+    const cdata = [{id: this.groupId || _.get(this.groupData, 'id'), type : 'group'}] ;
+    this.groupService.addTelemetry({id, extra}, this.activatedRoute.snapshot, cdata);
   }
 
   toggleFtuModal(visibility: boolean = false) {
     this.showMemberPopup = visibility;
+  }
+
+  handleEvent() {
+    this.groupService.emitActivateEvent('activate', 'activate-group' );
   }
 
   ngOnDestroy() {

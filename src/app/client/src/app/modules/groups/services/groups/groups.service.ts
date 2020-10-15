@@ -1,12 +1,13 @@
+import { IGroup } from './../../interfaces/group';
 import { Router } from '@angular/router';
 import { EventEmitter, Injectable } from '@angular/core';
 import { CsModule } from '@project-sunbird/client-services';
-import { CsGroupAddActivitiesRequest, CsGroupRemoveActivitiesRequest, CsGroupUpdateActivitiesRequest, CsGroupUpdateMembersRequest } from '@project-sunbird/client-services/services/group/interface';
+import { CsGroupAddActivitiesRequest, CsGroupRemoveActivitiesRequest, CsGroupSearchCriteria, CsGroupUpdateActivitiesRequest, CsGroupUpdateMembersRequest } from '@project-sunbird/client-services/services/group/interface';
 import { UserService, LearnerService } from '@sunbird/core';
 import { NavigationHelperService, ResourceService, ConfigService } from '@sunbird/shared';
 import { IImpressionEventInput, TelemetryService, IInteractEventInput } from '@sunbird/telemetry';
 import * as _ from 'lodash-es';
-import { IGroup, IGroupCard, IGroupMember, IGroupSearchRequest, IGroupUpdate, IMember, MY_GROUPS } from '../../interfaces';
+import { IGroupCard, IGroupMember, IGroupUpdate, IMember, MY_GROUPS } from '../../interfaces';
 import { CsLibInitializerService } from './../../../../service/CsLibInitializer/cs-lib-initializer.service';
 
 @Injectable({
@@ -22,6 +23,7 @@ export class GroupsService {
   public closeForm = new EventEmitter();
   public showLoader = new EventEmitter();
   public showMenu = new EventEmitter();
+  public showActivateModal = new EventEmitter();
   public _groupListCount: number;
 
   constructor(
@@ -95,13 +97,14 @@ export class GroupsService {
     return this.groupCservice.updateById(groupId, updateRequest);
   }
 
-  searchUserGroups(request: IGroupSearchRequest) {
+  searchUserGroups(request: CsGroupSearchCriteria) {
     return this.groupCservice.search(request);
   }
 
   // To get groupData from csService
   getGroupById(groupId: string, includeMembers?: boolean, includeActivities?: boolean, groupActivities?: boolean) {
-    return this.groupCservice.getById(groupId, { includeMembers, includeActivities, groupActivities });
+    const groupData = this.groupCservice.getById(groupId, { includeMembers, includeActivities, groupActivities });
+    return groupData;
   }
 
   deleteGroupById(groupId: string) {
@@ -184,7 +187,7 @@ getActivity(groupId, activity, mergeGroup) {
     }
 
 
-  addTelemetry(eid: string, routeData, cdata, groupId?: string, extra?) {
+  addTelemetry(eid: {id: string, extra?: {}}, routeData, cdata, obj?) {
 
     const interactData: IInteractEventInput = {
       context: {
@@ -192,23 +195,20 @@ getActivity(groupId, activity, mergeGroup) {
         cdata: cdata
       },
       edata: {
-        id: eid,
+        id: eid.id,
         type: 'click',
         pageid: _.get(routeData, 'data.telemetry.pageid'),
       }
     };
 
-    if (extra) {
-      interactData.edata.extra = extra;
+    if (!_.isEmpty(eid.extra)) {
+      interactData.edata.extra = eid.extra;
     }
 
-    if (_.get(routeData, 'params.groupId') || groupId) {
-      interactData['object'] = {
-        id: _.get(routeData, 'params.groupId') || groupId,
-        type: 'Group',
-        ver: '1.0',
-      };
+    if (obj) {
+      interactData['object'] = obj;
     }
+
     this.telemetryService.interact(interactData);
   }
 
@@ -283,4 +283,17 @@ getActivity(groupId, activity, mergeGroup) {
     }
     return { showList, activities: activitiesGrouped || {} };
 }
+
+  emitActivateEvent(name, eventName) {
+    this.showActivateModal.emit({name, eventName});
+  }
+
+  deActivateGroupById(groupId: string) {
+    return this.groupCservice.suspendById(groupId);
+  }
+
+  activateGroupById(groupId: string) {
+    return this.groupCservice.reactivateById(groupId);
+  }
+
 }
